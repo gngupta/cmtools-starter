@@ -1,0 +1,26 @@
+mutation createCarWithProduct($cart: MyCartDraft!, $locale: Locale!){
+    createMyCart(draft: $cart){
+        id
+        version
+        lineItems {
+            id
+            quantity
+            productId
+            name(locale:$locale)
+            productSlug(locale:$locale)
+            totalPrice{
+                centAmount
+                currencyCode
+            }
+            variant{
+                images{
+                    url 
+                }               
+            }
+        }
+        totalPrice{
+            currencyCode
+            centAmount
+        }
+    }
+}

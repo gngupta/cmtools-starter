@@ -1,0 +1,57 @@
+query getproduct($productId: String!, $locale: Locale!, $currency: Currency!) {
+    product(id: $productId) {
+        masterData {
+            current {
+                name(locale: $locale)
+                description(locale: $locale)
+                masterVariant{
+                    type:__typename
+                    attributeList {
+                        ... on StringAttribute {
+                            name
+                            value
+                        }
+                        ... on BooleanAttribute {
+                            booleanValue:value
+                            name
+                        }
+                        ... on DateAttribute {
+                            name
+                            dateValue:value
+                        }
+                        ... on NumberAttribute {
+                            name
+                        }
+                        ... on EnumAttribute {
+                            name
+                            key
+                            label
+                        }
+                        ... on LocalizedEnumAttribute{
+                            name
+                            value:key
+                            lLabel:label(locale:$locale)
+                        }
+                        ... on LocalizedStringAttribute{
+                            name
+                            lvalue:value(locale:$locale)
+                        }
+                    }
+                    images{
+                        url
+                    }
+                    price(currency: $currency){
+                        value{
+                            ...printPrice
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+            
+fragment printPrice on BaseMoney{
+    centAmount
+    fractionDigits
+}

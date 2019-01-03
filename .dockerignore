@@ -1,0 +1,12 @@
+# Below folder/file will be ignored for docker commands. Please add your items in albhabetical order.
+
+.dockerignore
+.git
+.gitlab-ci2.yml
+artifacts
+dist
+Dockerfile
+node_modules
+README.md
+selenium-debug.log
+wunderman-commerce-deploy.yml

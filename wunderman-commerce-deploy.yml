@@ -1,0 +1,52 @@
+# -------------------Create a Namespace ------------------- #
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cmtools-system
+
+---
+# ------------------- cmtools Deployment ------------------- #
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmtools-deployment
+  namespace: cmtools-system
+  labels:
+    cmtools-app: cmtools-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      cmtools-app: cmtools-app
+  template:
+    metadata:
+      labels:
+        cmtools-app: cmtools-app
+    spec:
+      containers:
+      - name: cmtools-app
+        image: gorakh/cmtools-app:latest
+        ports:
+        - containerPort: 80
+
+---
+# ------------------- cmtools Service ------------------- #
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cmtools-service
+  namespace: cmtools-system
+  labels:
+    cmtools-service: cmtools-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    cmtools-app: cmtools-app

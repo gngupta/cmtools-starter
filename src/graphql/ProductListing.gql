@@ -1,0 +1,30 @@
+query listProducts($locale: Locale!, $currency: Currency!, $where: String, $maxNr: Int = 36) {
+    products(limit: $maxNr, where: $where) {
+        count
+        results{
+            id
+            masterData{
+                current{
+                    name(locale: $locale)
+                    description(locale: $locale)
+                    slug(locale: "en")
+                    masterVariant{
+                        images{
+                            url
+                        }
+                        price(currency: $currency){
+                            value{
+                                ...printPrice
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }     
+}
+        
+fragment printPrice on BaseMoney{
+    centAmount
+    fractionDigits
+}

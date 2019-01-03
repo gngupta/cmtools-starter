@@ -1,0 +1,61 @@
+query getProductc($locale: Locale!, $currency: Currency!, $where: String, $maxNr: Int = 1) {
+  products(limit: $maxNr, where: $where) {
+    count
+    results {
+      id
+      masterData {
+        current {
+          name(locale: $locale)
+          description(locale: $locale)
+          masterVariant {
+            type: __typename
+            attributeList {
+              ... on StringAttribute {
+                name
+                value
+              }
+              ... on BooleanAttribute {
+                booleanValue: value
+                name
+              }
+              ... on DateAttribute {
+                name
+                dateValue: value
+              }
+              ... on NumberAttribute {
+                name
+              }
+              ... on EnumAttribute {
+                name
+                key
+                label
+              }
+              ... on LocalizedEnumAttribute {
+                name
+                value: key
+                lLabel: label(locale: $locale)
+              }
+              ... on LocalizedStringAttribute {
+                name
+                lvalue: value(locale: $locale)
+              }
+            }
+            images {
+              url
+            }
+            price(currency: $currency) {
+              value {
+                ...printPrice
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment printPrice on BaseMoney {
+  centAmount
+  fractionDigits
+}

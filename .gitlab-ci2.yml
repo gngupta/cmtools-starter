@@ -1,0 +1,16 @@
+#image: node:8
+#
+#stages:
+#  - test
+#
+#test_unit:
+#  stage: test
+#  script:
+#    - npm install
+#    - npm run test:unit
+#
+#test_e2e:
+#  stage: test
+#  script:
+#    - npm install
+#    - npm run test:e2e

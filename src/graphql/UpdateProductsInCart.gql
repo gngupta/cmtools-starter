@@ -1,0 +1,26 @@
+mutation addProductToCart($cartId: String!, $version: Long!,$actions: [MyCartUpdateAction!]!, $locale: Locale!){
+    updateMyCart(id: $cartId, version: $version, actions:$actions){
+        id
+        version
+        lineItems {
+            id
+            quantity
+            productId
+            name(locale:$locale)
+            productSlug(locale:$locale)
+            totalPrice{
+                centAmount
+                currencyCode
+            }
+            variant{
+                images{
+                    url 
+                }               
+            }
+        }
+        totalPrice{
+            currencyCode
+            centAmount
+        }
+    }
+}
