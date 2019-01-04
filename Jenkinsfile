@@ -2,8 +2,7 @@
 
 // load pipeline functions
 // Requires pipeline-github-lib plugin to load library from github
-
-@Library('/artifacts/jenkins-pipeline')
+evaluate(new File('./artifacts/jenkins-pipeline'))
 
 def pipeline = new io.estrado.Pipeline()
 
