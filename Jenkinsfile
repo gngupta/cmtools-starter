@@ -20,6 +20,8 @@ volumes:[
 
   node ('jenkins-pipeline') {
 
+     println "running jejenkins-pipelinen"
+
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/croc-hunter"
 
