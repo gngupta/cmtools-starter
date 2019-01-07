@@ -21,7 +21,7 @@ def pipeline = new io.estrado.Pipeline()
     
 	stage('test deployment') {
     container('jnlp') {
-        sh "pwd"
+        sh "pwd" 
       }
   }
 
