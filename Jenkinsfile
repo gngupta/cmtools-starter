@@ -5,7 +5,6 @@
 
 
 podTemplate(label: 'jenkins-pipeline', containers: [
-		containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.10-1', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
 		containerTemplate(name: 'docker', image: 'docker:1.12.6', command: 'cat', ttyEnabled: true)
 	],
 	volumes: [
