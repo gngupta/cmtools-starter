@@ -25,4 +25,3 @@ def pipeline = new io.estrado.Pipeline()
 
 	stage('publish container') {}
 }
-}
