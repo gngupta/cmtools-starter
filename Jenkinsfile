@@ -3,7 +3,6 @@
 // load pipeline functions
 // Requires pipeline-github-lib plugin to load library from github
 
-def pipeline = new io.estrado.Pipeline()
 
 	podTemplate(label: 'jenkins-pipeline', containers: [
 			containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
