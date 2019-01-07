@@ -19,6 +19,7 @@ def pipeline = new io.estrado.Pipeline()
 		def pwd = pwd()
 			checkout scm
 	}
+  
 
 	stage('test deployment') {}
 
