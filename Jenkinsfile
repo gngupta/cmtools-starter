@@ -13,16 +13,17 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 	]) {
 
 	node('jenkins-pipeline') {
+	
 
-		def pwd = pwd()
-			checkout scm
-
-			stage('test deployment') {
-			container('docker') {
-				sh "pwd"
-				sh "docker version"
+			stage('Checkout code') {
+				checkout scm	
 			}
-		}
+
+			stage('Build vue node') {
+				container('docker') {
+					sh "docker build . -t gorakh/cmtools-app:latest"
+				}
+			}
 
 	}
 }
