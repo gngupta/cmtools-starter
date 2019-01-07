@@ -1,11 +1,28 @@
 #!/usr/bin/groovy
 
-node {
-		stage (‘Build’) {
-			sh "echo 'Test jenkins'"
-		}
+// load pipeline functions
+// Requires pipeline-github-lib plugin to load library from github
 
-stage('Selenium tests') {
-  sh "echo 'Selenium tests'"
+@ Library('github.com/lachie83/jenkins-pipeline@dev')
+
+def pipeline = new io.estrado.Pipeline()
+
+	podTemplate(label: 'jenkins-pipeline', containers: [
+			containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '300m', resourceRequestMemory: '256Mi', resourceLimitMemory: '512Mi'),
+
+		],
+		volumes: [
+			hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+		]) {
+
+	node('jenkins-pipeline') {
+
+		def pwd = pwd()
+			checkout scm
+	}
+
+	stage('test deployment') {}
+
+	stage('publish container') {}
 }
 }
