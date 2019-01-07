@@ -18,14 +18,14 @@ def pipeline = new io.estrado.Pipeline()
 
 		def pwd = pwd()
 			checkout scm
-	}
-
-
+    
 	stage('test deployment') {
     container('jnlp') {
         sh "pwd"
       }
   }
 
-	stage('publish container') {}
+
+
+  }
 }
