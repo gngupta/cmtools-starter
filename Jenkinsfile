@@ -5,7 +5,7 @@
 
 
 podTemplate(label: 'jenkins-pipeline', containers: [
-		containerTemplate(name: 'docker', image: 'docker:1.12.6', command: 'cat', ttyEnabled: true)
+		containerTemplate(name: 'docker', image: 'docker:18.06', command: 'cat', ttyEnabled: true)
 	],
 	volumes: [
 		hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
