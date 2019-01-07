@@ -6,7 +6,7 @@
 
 podTemplate(label: 'jenkins-pipeline', containers: [
 		containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
-		containerTemplate(name: 'docker', image: 'docker:18.06', command: 'cat', ttyEnabled: true)
+		containerTemplate(name: 'docker', image: 'docker:18.06.1-ce', command: 'cat', ttyEnabled: true)
 	],
 	volumes: [
 		hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
