@@ -8,3 +8,4 @@ node {
 stage('Selenium tests') {
   sh "echo 'Selenium tests'"
 }
+}
