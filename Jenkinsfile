@@ -1,10 +1,5 @@
 #!/usr/bin/groovy
 
-// load pipeline functions
-// Requires pipeline-github-lib plugin to load library from github
-
-@Library('github.com/gngupta/jenkins-pipeline')
-
 podTemplate(label: 'jenkins-pipeline', containers: [
 		containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
 		containerTemplate(name: 'docker', image: 'docker:18.06.1-ce', command: 'cat', ttyEnabled: true)
