@@ -24,7 +24,6 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			}
 
 			stage('Deploy and run test scripts'){
-				def pipeline = new com.jenkins.utils.Pipeline()
 				println "TODO - extend pipline code to run test scripts"
 			}
 
