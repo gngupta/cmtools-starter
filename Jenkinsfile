@@ -3,6 +3,7 @@
 // load pipeline functions
 // Requires pipeline-github-lib plugin to load library from github
 
+@Library('github.com/gngupta/jenkins-pipeline')
 
 podTemplate(label: 'jenkins-pipeline', containers: [
 		containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
@@ -15,13 +16,29 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 	node('jenkins-pipeline') {
 
 			stage('Checkout code') {
-				checkout scm	
+				checkout scm
+				def rootDir = pwd()
+    			def piplineUtil = load "${rootDir}/artifacts/jenkins/PiplineUtil.Groovy"
+				pipelineUtil.pipelineUtilTest();
 			}
 
-			stage('Build vue node') {
+			stage('Build image') {
 				container('docker') {
 					sh "docker build . -t gorakh/cmtools-app:latest"
 				}
+			}
+
+			stage('Deploy and run test scripts'){
+				def pipeline = new com.jenkins.utils.Pipeline()
+				println "TODO - extend pipline code to run test scripts"
+			}
+
+			stage('Publish image') {
+				println "TODO - extend pipline code to publish image"	
+			}
+
+			stage('Deploy to cluster') {
+				println "TODO - extend pipline code to deploy image to cluster"	
 			}
 
 	}

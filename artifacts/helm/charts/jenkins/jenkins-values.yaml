@@ -7,4 +7,11 @@ Master:
   ImageTag: "lts-alpine"
   InstallPlugins:
       - blueocean:1.10.1
-      - kubernetes:1.14.2
+      - credentials-binding:1.17
+      - git:3.9.1
+      - kubernetes:1.14.0
+      - workflow-aggregator:2.6
+      - workflow-job:2.31
+
+      
+      
