@@ -6,6 +6,8 @@
 artifacts
 dist
 Dockerfile
+Jenkinsfile
+Jenkinsfile.json
 node_modules
 README.md
 selenium-debug.log
