@@ -40,7 +40,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 				}
 				container('helm') {
-					pipeline.helmConfig()
+					pipelineUtil.helmConfig()
 				}
 			}
 
