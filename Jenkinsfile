@@ -13,7 +13,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			stage('Checkout code') {
 				checkout scm
 				def rootDir = pwd()
-    			def piplineUtil = load "${rootDir}/artifacts/jenkins/PipelineUtil.Groovy"
+    			def piplineUtil = load "${rootDir}/artifacts/jenkins/PipelineUtil.groovy"
 				pipelineUtil.pipelineUtilTest();
 			}
 
