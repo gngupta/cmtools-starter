@@ -1,0 +1,10 @@
+# Includes complete Jenkins configuration in order to run pipeline
+# To install on your own cluster, run:
+# helm --namespace jenkins --name jenkins -f ./jenkins-values.yaml install stable/jenkins
+
+Master:
+  Image: "jenkins/jenkins"
+  ImageTag: "lts-alpine"
+  InstallPlugins:
+      - blueocean:1.10.1
+      - kubernetes:1.14.2
