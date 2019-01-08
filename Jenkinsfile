@@ -14,10 +14,12 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 			stage('Checkout code') {
 				checkout scm
-				def rootDir = pwd()
-    			def pipelineUtil = load "${rootDir}/artifacts/jenkins/PipelineUtil.groovy"
-				pipelineUtil.pipelineUtilTest();
 			}
+
+			//Below variables should be global.
+			def rootDir = pwd()
+			def pipelineUtil = load "${rootDir}/artifacts/jenkins/PipelineUtil.groovy"
+			pipelineUtil.pipelineUtilTest();
 
 			stage('Build image') {
 				container('docker') {
