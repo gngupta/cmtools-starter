@@ -12,7 +12,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 	node('jenkins-pipeline') {
 
-			stage('Checkout code') {
+			stage('Checkout') {
 				checkout scm
 			}
 

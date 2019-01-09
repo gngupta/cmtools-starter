@@ -192,12 +192,9 @@ def getMapValues(Map map = [: ]) {
 def getHelmReleaseOverrides(Map map = [: ]) {
     // jenkins and workflow restriction force this function instead of map.each(): https://issues.jenkins-ci.org/browse/JENKINS-27421
     def options = ""
-    map.each {
-        key,
-        value - >
+    map.each { key, value ->
         options += "$key=$value,"
     }
-
     return options
 }
 
