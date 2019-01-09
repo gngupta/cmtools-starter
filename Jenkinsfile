@@ -1,5 +1,8 @@
 #!/usr/bin/groovy
 
+
+stage('Provision Pod'){
+
 podTemplate(label: 'jenkins-pipeline', containers: [
 		containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
 		containerTemplate(name: 'docker', image: 'docker:18.06.1-ce', command: 'cat', ttyEnabled: true),
@@ -8,7 +11,10 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 	],
 	volumes: [
 		hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
-	]) {
+	])
+}	
+	
+	 {
 
 	node('jenkins-pipeline') {
 
@@ -21,7 +27,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			def pipelineUtil = load "${rootDir}/artifacts/jenkins/PipelineUtil.groovy"
 			pipelineUtil.pipelineUtilTest();
 
-			stage('Build image') {
+			stage('Build Image') {
 				container('docker') {
 					sh "docker build . -t gorakh/cmtools-app:latest"
 				}
@@ -31,7 +37,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 				println "TODO - extend pipline code to run test scripts"
 			}
 
-			stage('Publish image') {
+			stage('Publish Image') {
 				println "TODO - extend pipline code to publish image"	
 			}
 

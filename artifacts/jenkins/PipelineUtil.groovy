@@ -29,7 +29,7 @@ def helmDeploy(Map args) {
     helmConfig()
     def String release_overrides = ""
     if (args.set) {
-      release_overrides = getHelmReleaseOverrides(args.set)
+        release_overrides = getHelmReleaseOverrides(args.set)
     }
 
     def String namespace
@@ -56,9 +56,9 @@ def helmDeploy(Map args) {
 }
 
 def helmDelete(Map args) {
-        println "Running helm delete ${args.name}"
+    println "Running helm delete ${args.name}"
 
-        sh "helm delete ${args.name}"
+    sh "helm delete ${args.name}"
 }
 
 def helmTest(Map args) {
@@ -107,7 +107,7 @@ def containerBuildPub(Map args) {
     }
 }
 
-def getContainerTags(config, Map tags = [:]) {
+def getContainerTags(config, Map tags = [: ]) {
 
     println "getting list of tags for container"
     def String commit_tag
@@ -173,15 +173,15 @@ def getContainerRepoAcct(config) {
 }
 
 @NonCPS
-def getMapValues(Map map=[:]) {
+def getMapValues(Map map = [: ]) {
     // jenkins and workflow restriction force this function instead of map.values(): https://issues.jenkins-ci.org/browse/JENKINS-27421
     def entries = []
     def map_values = []
 
     entries.addAll(map.entrySet())
 
-    for (int i=0; i < entries.size(); i++){
-        String value =  entries.get(i).value
+    for (int i = 0; i < entries.size(); i++) {
+        String value = entries.get(i).value
         map_values.add(value)
     }
 
@@ -189,10 +189,12 @@ def getMapValues(Map map=[:]) {
 }
 
 @NonCPS
-def getHelmReleaseOverrides(Map map=[:]) {
+def getHelmReleaseOverrides(Map map = [: ]) {
     // jenkins and workflow restriction force this function instead of map.each(): https://issues.jenkins-ci.org/browse/JENKINS-27421
     def options = ""
-    map.each { key, value ->
+    map.each {
+        key,
+        value - >
         options += "$key=$value,"
     }
 

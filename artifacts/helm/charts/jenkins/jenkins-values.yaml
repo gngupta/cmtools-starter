@@ -12,6 +12,3 @@ Master:
       - kubernetes:1.14.0
       - workflow-aggregator:2.6
       - workflow-job:2.31
-
-      
-      
