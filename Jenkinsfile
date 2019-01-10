@@ -33,15 +33,14 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			}
 
 			stage('Push') {
-				println "TODO - extend pipline code to publish image"	
+				container('docker') {
+					println "TODO - extend pipline code to push docker image"
+				}	
 			}
 
 			stage('Deploy') {
 				container('kubectl') {
 					sh "kubectl apply -f ./wunderman-commerce-deploy.yml"
-				}
-				container('helm') {
-					pipelineUtil.helmConfig()
 				}
 			}
 
