@@ -38,9 +38,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 			stage('Deploy') {
 				container('kubectl') {
-					println "TODO - extend pipline code to deploy image to cluster"
-        			pipelineUtil.kubectlTest()
-
+					sh "kubectl apply -f ./wunderman-commerce-deploy.yml"
 				}
 				container('helm') {
 					pipelineUtil.helmConfig()

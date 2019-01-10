@@ -28,6 +28,7 @@ spec:
       containers:
       - name: cmtools-app
         image: gorakh/cmtools-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
 
