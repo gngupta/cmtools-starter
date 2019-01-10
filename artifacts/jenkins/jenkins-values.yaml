@@ -9,6 +9,6 @@ Master:
       - blueocean:1.10.1
       - credentials-binding:1.17
       - git:3.9.1
-      - kubernetes:1.14.0
+      - kubernetes:1.14.3
       - workflow-aggregator:2.6
       - workflow-job:2.31
