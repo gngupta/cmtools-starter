@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "croc-hunter",
+    "name": "cmtools-app",
     "replicas": "3",
     "cpu": "10m",
     "memory": "128Mi",
@@ -9,19 +9,16 @@
   },
   "container_repo": {
     "host": "quay.io",
-    "master_acct": "lachie83",
-    "alt_acct": "lachie83",
-    "jenkins_creds_id": "quay_creds",
-    "repo": "croc-hunter",
+    "master_acct": "gorakh",
+    "alt_acct": "gorakh",
+    "jenkins_creds_id": "docker_hub_creds",
+    "repo": "cmtools-app",
     "dockeremail": ".",
     "dockerfile": "./",
     "image_scanning": false
   },
   "pipeline": {
     "enabled": true,
-    "debug": false,
-    "library": {
-      "branch": "dev"
-    }
+    "debug": true
   }
 }

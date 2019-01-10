@@ -6,6 +6,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
 		containerTemplate(name: 'docker', image: 'docker:18.06.1-ce', command: 'cat', ttyEnabled: true),
 		containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.11.6', command: 'cat', ttyEnabled: true),
+		containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.12.1', command: 'cat', ttyEnabled: true)
 	],
 	volumes: [
 		hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
@@ -27,6 +28,30 @@ podTemplate(label: 'jenkins-pipeline', containers: [
     		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
     		println "pipeline config ==> ${config}"
 
+			// set additional git envvars for image tagging
+			pipelineUtil.gitEnvVars()
+
+			// If pipeline debugging enabled
+			if (config.pipeline.debug) {
+				println "DEBUG ENABLED"
+				sh "env | sort"
+
+				println "Runing kubectl/helm tests"
+				container('kubectl') {
+					pipelineUtil.kubectlTest()
+				}
+				container('helm') {
+					pipelineUtil.helmConfig()
+				}
+			}
+
+			    def acct = pipelineUtil.getContainerRepoAcct(config)
+
+				// tag image with version, and branch-commit_id
+				def image_tags_map = pipelineUtil.getContainerTags(config)
+
+				// compile tag list
+				def image_tags_list = pipelineUtil.getMapValues(image_tags_map)
 
 			stage('Build') {
 				container('docker') {
