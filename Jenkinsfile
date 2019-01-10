@@ -41,8 +41,8 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			stage('Deploy') {
 				container('kubectl') {
 					sh "kubectl apply -f ./wunderman-commerce-deploy.yml"
+					sh "echo 'cmtools-app is running at http://';kubectl get svc -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' -n=cmtools-system;echo"
 				}
 			}
-
 	}
 }
