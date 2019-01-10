@@ -18,10 +18,10 @@
     "image_scanning": false
   },
   "pipeline": {
-      "enabled": true,
-      "debug": false,
-      "library": {
-        "branch": "dev"
-      }
+    "enabled": true,
+    "debug": false,
+    "library": {
+      "branch": "dev"
+    }
   }
 }

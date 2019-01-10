@@ -18,7 +18,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 			//Below variables should be global.
 			def rootDir = pwd()
-			def pipelineUtil = load "${rootDir}/artifacts/jenkins/PipelineUtil.groovy"
+			def pipelineUtil = load "${rootDir}/artifacts/cicd/PipelineUtil.groovy"
 			pipelineUtil.pipelineUtilTest();
 
 			stage('Build') {
