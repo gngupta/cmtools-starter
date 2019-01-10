@@ -28,7 +28,6 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 			stage('Push') {
 				container('docker') {
-					println "TODO - extend pipline code to push docker image"
 					withDockerRegistry([ credentialsId: "docker_hub_creds", url: "" ]) {
           				sh "docker push gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
        				}
@@ -37,7 +36,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 			stage('Deploy') {
 				container('kubectl') {
-					sh "kubectl apply -f ./wunderman-commerce-deploy.yml"
+					sh "kubectl set image deployment/cmtools-deployment cmtools-app=gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER} -n=cmtools-system"
 				}
 			}
 	}
