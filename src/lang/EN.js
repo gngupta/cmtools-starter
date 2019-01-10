@@ -1,7 +1,7 @@
 export const messages = {
   EN: {
     common: {
-      storeName: "Wunderman shop",
+      storeName: "WunderTech",
       form: {
         save: "Save",
         notCorrect: "The form is not filled in correctly.",
