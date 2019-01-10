@@ -1,8 +1,61 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <VApp>
+    <Toolbar @toggleNavBar="toggleNavBar"/>
+    <VContent>
+      <router-view/>
+    </VContent>
+    <VNavigationDrawer
+      v-model="drawer"
+      app
+      light
+    >
+      <Navigation/>
+    </VNavigationDrawer>
+    <VFooter>
+      <Footer/>
+    </VFooter>
+  </VApp>
 </template>
+
+
+<script>
+import Navigation from "@/components/Navigation";
+import Toolbar from "@/components/Toolbar";
+import Footer from "@/components/Footer";
+
+export default {
+  name: "App",
+  components: {
+    Navigation,
+    Toolbar,
+    Footer
+  },
+  data(){
+    return{
+      drawer: false
+    }
+  },
+  computed: {
+    cartitems() {
+      const ZERO_ITEMS = 0;
+      if(this.$store.getters.cart.lineItems != null){
+        return this.$store.getters.cart.lineItems.length;
+      } else{
+        return ZERO_ITEMS;
+      }
+    }
+  },
+  methods:{
+    toggleNavBar() {
+      this.drawer = !this.drawer;
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>
 
 <style lang="scss">
 #app {

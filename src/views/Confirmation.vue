@@ -1,12 +1,10 @@
 <template>
   <div id="container">
-    <b-container>
-      <Header :show-cart="false"/>
+    <v-container>
       <div id="body">
         <OrderConfirmation/>
       </div>
-      <Footer/>
-    </b-container>
+    </v-container>
   </div>
 </template>
 

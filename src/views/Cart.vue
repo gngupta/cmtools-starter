@@ -1,7 +1,7 @@
 <template>
   <div id="container">
-    <b-container>
-      <Header :show-cart="false"/>
+    <v-container>
+      
       <div id="body">
         <section v-if="this.$store.getters.cart.id == null">
           {{ $t('view.cart.notAvailable') }}
@@ -9,17 +9,17 @@
         <section v-else>
           <cartdetails/>
           <section v-if="this.$store.getters.cart.lineItems.length != 0">
-            <span 
-              class="cart-btn checkout" 
-              @click="checkout()">{{ $t('view.cart.checkout') }}</span>
+            <v-btn 
+              color="success" 
+              @click="checkout()">{{ $t('view.cart.checkout') }}</v-btn>
           </section>
           <section v-else>
             {{ $t('view.cart.empty') }}
           </section>
         </section>
       </div>
-      <Footer/>
-    </b-container>
+      
+    </v-container>
   </div>
 </template>
 

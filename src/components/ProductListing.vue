@@ -11,15 +11,21 @@
         class="wrapper" 
       >
         {{ data.products.count + $t('component.productInfo.productsFound') }} 
-        <div class="product-grid product-grid--flexbox">
-          <div class="product-grid__wrapper">
+        <v-container
+          fluid
+          grid-list-lg
+        >
+          <v-layout 
+            row 
+            wrap
+          >
             <ProductSummary
               v-for="product in data.products.results"
               :product="product"
               :key="product.id"
             />
-          </div>
-        </div>
+          </v-layout>
+        </v-container>
       </div>
     </template>
   </ApolloQuery>

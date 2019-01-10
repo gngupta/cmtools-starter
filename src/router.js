@@ -7,6 +7,9 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  },
   routes: [
     {
       path: '/',
@@ -19,13 +22,13 @@ export default new Router({
       component: () => import( './views/About.vue')
     },
     {
-      path: '/category/:categorySlug',
+      path: '/:locale/category/:categoryID/:categorySlug',
       name: 'category',
       component: () => import( './views/Category.vue'),
       props: true
     },
     {
-      path: '/product/:productSlug',
+      path: '/:locale/product/:productID/:productSlug',
       name: 'product',
       component: () => import( './views/ProductPage.vue'),
       props: true
@@ -58,6 +61,12 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: () => import( './views/Search.vue'),
+      props: true
+    },
+    {
+      path: '/testpage',
+      name: 'testpage',
+      component: () => import( './views/TestPage.vue'),
       props: true
     }
   ]

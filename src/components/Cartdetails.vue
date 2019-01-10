@@ -2,51 +2,70 @@
   <div>
     <h2>{{ $t('component.cartDetails.myCart') }}</h2>
     <section v-if="this.$store.getters.cart.id != null">
-      <div class="cart">
-        <b-container>
-          <b-row 
-            v-for="line in cartdetails.lineItems" 
-            :key="line.id"
-          >
-            <b-col>
-              <img
-                v-if="line.variant.images[0] != null"
-                :src="line.variant.images[0].url"
-                width="50px"
-                height="50px"
-              >
-            </b-col>
-            <b-col cols="7">{{ line.name }}</b-col>
-            <b-col>{{ line.quantity }}</b-col>
-            <ApolloMutation
-              :mutation="require('@/graphql/UpdateProductsInCart.gql')"
-              :variables="{locale: language, cartId:cartId, version:version, actions: [{removeLineItem: {lineItemId: line.id}}]}"
-              @done="deleteItem"
-            >
-              <template slot-scope="{ mutate, loading, error }">
-                <b-col>
-                  <b-button 
-                    :disabled="loading" 
-                    @click="mutate()">
-                    {{ $t('component.cartDetails.delete') }}
-                  </b-button>
-                  <p v-if="error">An error occured: {{ error }}</p>
-                </b-col>
-              </template>
-            </ApolloMutation>
-          
-            <b-col cols="2">{{ line.totalPrice.currencyCode }} {{ formatPrice(line.totalPrice.centAmount) }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="10">
-              Total
-            </b-col>
-            <b-col>
-              {{ cartdetails.totalPrice.currencyCode }} {{ formatPrice(cartdetails.totalPrice.centAmount) }} 
-            </b-col>
-          </b-row>
-        </b-container>
-      </div>
+      <v-container
+        fluid
+        grid-list-lg
+      >
+        <v-layout 
+          v-for="line in cartdetails.lineItems" 
+          :key="line.id"
+          row 
+          justify-space-between>
+          <v-flex xs2>
+                <img
+                  v-if="line.variant.images[0] != null"
+                  :src="line.variant.images[0].url"
+                  width="50px"
+                  height="50px"
+                >
+          </v-flex>
+          <v-flex xs2>
+                <ApolloMutation
+                  :mutation="require('@/graphql/UpdateProductsInCart.gql')"
+                  :variables="{locale: language, cartId:cartId, version:version, actions: [{changeLineItemQuantity: {lineItemId: line.id, quantity: Number(line.quantity)}}]}"
+                  @done="updateItemInCart"
+                >
+                  <template slot-scope="{ mutate, loading, error }">
+                    <v-text-field
+                      v-model="line.quantity"
+                      :disabled="loading"
+                      :rules="[rules.required, rules.counter]"
+                      type="number"
+                      label="Quantity"
+                      @change="mutate()"   
+                    />
+                    <p v-if="error">An error occured: {{ error }}</p>
+                  </template>
+                </ApolloMutation>
+          </v-flex>
+          <v-flex xs2>
+                {{ line.name }}
+          </v-flex>
+          <v-flex xs2>
+                <ApolloMutation
+                  :mutation="require('@/graphql/UpdateProductsInCart.gql')"
+                  :variables="{locale: language, cartId:cartId, version:version, actions: [{removeLineItem: {lineItemId: line.id}}]}"
+                  @done="updateItemInCart"
+                >
+                  <template slot-scope="{ mutate, loading, error }">
+                    <v-btn
+                      :disabled="loading" 
+                      @click="mutate()">
+                      {{ $t('component.cartDetails.delete') }}
+                    </v-btn>
+                    <p v-if="error">An error occured: {{ error }}</p>
+                
+                  </template>
+                </ApolloMutation>
+          </v-flex>
+          <v-flex xs2>
+                {{ line.totalPrice.currencyCode }} {{ formatPrice(line.totalPrice.centAmount) }}
+          </v-flex>
+            </v-layout>
+      </v-container> 
+
+
+
     </section>
     <section v-else>{{ $t('component.cartDetails.emptyCart') }}</section>
   </div>
@@ -54,9 +73,20 @@
 
 <script>
 import priceMixin from "@/mixins/priceMixin";
+
 export default {
   name: "Cartdetails",
   mixins: [priceMixin],
+  data() {
+    return{
+      cartLineItems : this.$store.getters.cart.lineItems,
+      rules:{
+        required: value => !!value || 'Required.',
+        counter: value => value < 20 || 'Max quantity is 20',
+      }
+    }
+  },
+  
   computed: {
     cartdetails() {
       return this.$store.getters.cart;
@@ -73,7 +103,7 @@ export default {
    
   },
   methods: {
-    deleteItem(data) {
+    updateItemInCart(data) {
       this.$store.commit("setCart", data.data.updateMyCart);
     }
   }
@@ -94,5 +124,17 @@ export default {
   margin-top: 0;
   margin-bottom: 0;
   padding-left: 0;
+}
+
+.invalid input {
+  border: 1px solid red;
+  background-color: rgb(248, 180, 180);
+}
+.invalid label {
+  color: red;
+}
+
+.invalid {
+  color : red;
 }
 </style>

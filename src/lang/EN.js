@@ -1,7 +1,7 @@
 export const messages = {
   EN: {
     common: {
-      storeName: "WunderTech",
+      storeName: "Wunderman shop",
       form: {
         save: "Save",
         notCorrect: "The form is not filled in correctly.",
@@ -75,7 +75,7 @@ export const messages = {
       },
       orderConfirmation: {
         title: "Thank you for your order!",
-        convertToOrder: "Convert to order",
+        convertToOrder: "Place order",
         shippingDetails: "Shipping details:",
         orderDetails: "Order details:"
       },

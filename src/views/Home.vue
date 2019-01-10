@@ -1,23 +1,19 @@
 <template>
   <div id="container">
-    <b-container>
-      <Header :show-cart="true"/>
+    <v-container>
+     
       <div id="body">
         <vue-markdown :source = "title" />
         <vue-markdown :source = "text" />
-        <b-img 
-          :src="image1" 
-          fluid
-          rounded
-        />
-        <b-img 
-          :src="image2" 
-          fluid
-          rounded
-        />
+        <VCarousel 
+          hide-controls="true" 
+          transition="fade">
+          <VCarouselItem :src="image1"/>
+          <VCarouselItem :src="image2"/>
+        </VCarousel>
       </div>
-      <Footer/>
-    </b-container>
+     
+    </v-container>
   </div>
 </template>
 

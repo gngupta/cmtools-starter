@@ -1,6 +1,9 @@
 <template>
-  <div>
-    
+  <v-container>
+    <v-layout 
+      row 
+      wrap>
+      <v-flex xs12>
     <div class="form-wrapper">
       <form @submit.prevent="save">
         <!-- Firstname input field -->
@@ -163,25 +166,24 @@
 
         <!-- submit button -->
         <div class="form-group">
-          <button 
+          <v-btn 
             :disabled="submitStatus === 'PENDING'"
+            color="success"
             type="submit"
-            class="cart-btn addAddress">{{ $t('common.form.save') }}</button>
+          >{{ $t('common.form.save') }}</v-btn>
         </div>
       </form>
     </div>
-    <b-modal 
-      ref="addressFormError" 
-      :title="$t('common.form.addressTitle')"
-      hide-footer>
-      <p>{{ $t('common.form.notCorrect') }}</p>
-      <b-btn 
-        class="mt-3" 
-        variant="outline-danger" 
-        block 
-        @click="hideAddressFormError">{{ $t('common.close') }}</b-btn>
-    </b-modal>
-  </div>
+    <v-alert
+      :value="alert"
+      type="error"
+      transition="scale-transition"
+    >
+      {{ $t('common.form.notCorrect') }}
+    </v-alert>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -195,6 +197,7 @@ export default {
   name: 'Address',
   data() {
     return{
+      alert: false,
       submitStatus: null,
       countries: [
         { text: "The Netherlands", value: "NL" }
@@ -250,10 +253,11 @@ export default {
       //checks the form with Vuelidate
       if(this.$v.$invalid) {
         this.submitStatus = 'ERROR';
+        this.alert = true;
         this.$refs.addressFormError.show()
         return;
       }
-
+      this.alert = false;
       this.submitStatus = 'PENDING';
             
       this.$apollo.mutate({

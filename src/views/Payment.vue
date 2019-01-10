@@ -1,26 +1,27 @@
 <template>
   <div id="container">
-    <b-container>
-      <Header :show-cart="false"/>
-      <div id="body">
-        <b-container>
-          <b-row>
-            <b-col>{{ $t('view.payment') }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col> {{ $t('view.paymentText') }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col>{{ $t('component.orderPayment.defaultPayment') }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col><b-button @click="payOrder()">{{ $t('component.orderPayment.payOrder') }}</b-button></b-col>
-          </b-row>
-        </b-container>
-        
-      </div>
-      <Footer/>
-    </b-container>
+    <v-container>
+      <v-layout 
+        row 
+        wrap>
+        <v-flex xs12>
+          <span class="Heading-large">{{ $t('view.payment') }}</span>
+        </v-flex>
+        <v-flex xs12>
+          {{ $t('view.paymentText') }}
+        </v-flex>
+        <v-flex xs12>
+          <div>{{ $t('component.orderPayment.defaultPayment') }}</div>
+          
+          <v-btn 
+            color="success" 
+            @click="payOrder()"
+          >
+            {{ $t('component.orderPayment.payOrder') }}
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
