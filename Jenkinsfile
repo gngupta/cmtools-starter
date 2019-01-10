@@ -35,13 +35,15 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			stage('Push') {
 				container('docker') {
 					println "TODO - extend pipline code to push docker image"
+					withDockerRegistry([ credentialsId: "docker_hub_creds", url: "" ]) {
+          				sh 'docker push gorakh/cmtools-app:latest'
+       				}
 				}	
 			}
 
 			stage('Deploy') {
 				container('kubectl') {
 					sh "kubectl apply -f ./wunderman-commerce-deploy.yml"
-					sh "echo 'cmtools-app is running at http://' && kubectl get svc -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' -n=cmtools-system"
 				}
 			}
 	}
