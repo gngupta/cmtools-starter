@@ -1,37 +1,38 @@
 <template>
-  <div>
-    <b-container>
-      <b-row>
-        <b-col>{{ $t('component.orderConfirmation.title') }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-row><b-col><b>{{ $t('component.orderConfirmation.orderDetails') }}</b></b-col></b-row>
-          <b-row 
-            v-for="line in cartdetails.lineItems" 
-            :key="line.id"
-          >
-            <b-col>{{ line.name }}</b-col>
-            <b-col>{{ line.quantity }}</b-col>
-            <b-col>{{ line.totalPrice.currencyCode }} {{ formatPrice(line.totalPrice.centAmount) }}</b-col>
-          </b-row>
-        </b-col>
-        <b-col>
-          <b-row><b-col><b>{{ $t('component.orderConfirmation.shippingDetails') }}</b></b-col></b-row>
-          <b-row>
-            <b-col>{{ cartdetails.shippingAddress.firstName }} {{ cartdetails.shippingAddress.lastName }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col>{{ cartdetails.shippingAddress.streetName }} {{ cartdetails.shippingAddress.streetNumber }}</b-col>
-          </b-row>
-          <b-row>
-            <b-col>{{ cartdetails.shippingAddress.postalCode }} {{ cartdetails.shippingAddress.city }} {{ cartdetails.shippingAddress.country }}</b-col>
-          </b-row>
-        </b-col>
-      </b-row>
-      <b-button @click="convert()">{{ $t('component.orderConfirmation.convertToOrder') }}</b-button>
-    </b-container>
-  </div>
+  
+  <v-container>
+    <v-layout 
+      row 
+      wrap>
+      <v-flex xs12>
+        {{ $t('component.orderConfirmation.title') }}
+      </v-flex>
+      <v-flex xs6>
+        <b>{{ $t('component.orderConfirmation.orderDetails') }}</b>
+        <v-flex 
+          v-for="line in cartdetails.lineItems" 
+          :key="line.id"
+          xs6 
+        >
+          {{ line.name }} {{ line.quantity }}{{ line.totalPrice.currencyCode }} {{ formatPrice(line.totalPrice.centAmount) }}
+        </v-flex>
+      </v-flex>
+      <v-flex xs6>
+        <b>{{ $t('component.orderConfirmation.shippingDetails') }}</b>
+        <div>{{ cartdetails.shippingAddress.firstName }} {{ cartdetails.shippingAddress.lastName }}</div>
+        <div>{{ cartdetails.shippingAddress.streetName }} {{ cartdetails.shippingAddress.streetNumber }}</div>
+        <div>{{ cartdetails.shippingAddress.postalCode }} {{ cartdetails.shippingAddress.city }} {{ cartdetails.shippingAddress.country }}</div>
+      </v-flex>
+      <v-flex xs12>
+        <v-btn
+          color="success"
+          @click="convert()"
+        >
+          {{ $t('component.orderConfirmation.convertToOrder') }}
+        </v-btn>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -66,3 +67,4 @@ export default {
 
 <style>
 </style>
+

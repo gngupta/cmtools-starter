@@ -75,7 +75,7 @@ export const messages = {
       },
       orderConfirmation: {
         title: "Thank you for your order!",
-        convertToOrder: "Convert to order",
+        convertToOrder: "Place order",
         shippingDetails: "Shipping details:",
         orderDetails: "Order details:"
       },

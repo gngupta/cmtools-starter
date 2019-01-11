@@ -1,7 +1,6 @@
 <template>
   <div id="container">
     <b-container>
-      <Header :show-cart="true"/>
       <div id="body">
         <SearchListing />
       </div>

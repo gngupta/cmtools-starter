@@ -26,12 +26,12 @@
               v-for="category in topCategory.children" 
               :key="category.id"
             >
-              <b-dropdown-item :to="{ name: 'category', params: { categorySlug: category.slug } }">
+              <b-dropdown-item :to="{ name: 'category', params: { categorySlug: category.slug, locale: this.$store.getters.locale, categoryID: category.id} }">
                 <b>{{ category.name }}</b>
                 <b-dropdown-item
                   v-for="subcategory in category.children"
                   :key="subcategory.id"
-                  :to="{ name: 'category', params: { categorySlug: subcategory.slug } }"
+                  :to="{ name: 'category', params: { categorySlug: subcategory.slug, locale: this.$store.getters.locale, categoryID: subcategory.id } }"
                 >{{ subcategory.name }}</b-dropdown-item>
               </b-dropdown-item>
               <b-dropdown-divider/>

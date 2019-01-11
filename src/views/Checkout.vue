@@ -1,13 +1,11 @@
 <template>
   <div id="container">
-    <b-container>
-      <Header :show-cart="false" />
-      <div id="body">
-        <cartdetails />
+    <v-container>
+      <div id="body"> {{ $t('view.checkout') }}
+        <cartdetails/>
         <Address @addressSaved="handleAfterCall"/>
       </div>
-      <Footer/>
-    </b-container>
+    </v-container>
   </div>
 </template>
 

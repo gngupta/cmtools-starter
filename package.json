@@ -35,6 +35,7 @@
         "vue-markdown": "^2.2.4",
         "vue-router": "^3.0.1",
         "vuelidate": "^0.7.4",
+        "vuetify": "^1.4.0",
         "vuex": "^3.0.1"
     },
     "devDependencies": {

@@ -8,7 +8,7 @@
     "hostname": "croc-hunter.acs.az.estrado.io"
   },
   "container_repo": {
-    "host": "quay.io",
+    "host": "docker.io",
     "master_acct": "gorakh",
     "alt_acct": "gorakh",
     "jenkins_creds_id": "docker_hub_creds",

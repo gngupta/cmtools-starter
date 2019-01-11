@@ -4,44 +4,64 @@
     :api-key="algolia.apiKey"
     index-name="products"
     auto-search = "false">
-    <div class="main_cont">
-      <div class="shift_left">
-        <h3> Color</h3>
-        <ais-refinement-list attribute-name="color"/>
-        <h3> Categories </h3>
-        <ais-refinement-list attribute-name="categories"/>
-      </div>
-      <div class="shift_right">
-        <ais-input placeholder="Find products..."/>
-        <ais-results-per-page-selector :options="[20, 50, 100]" />
-        <ais-stats>
-          <template slot-scope="{ totalResults, processingTime, query, resultStart, resultEnd }">
-            Showing {{ resultStart }} - {{ resultEnd }} of {{ totalResults }} results. Your query: <b>{{ query }}</b> took {{ processingTime }}ms
-          </template>
-        </ais-stats>
-        <ais-results>
-          <ais-menu attribute="categories" />
-          <template slot-scope="{ result }">
-            <SearchResult 
-              :product = "result" 
-              :key="result.id" />
-          </template>
-        </ais-results>
-        <ais-pagination 
-          :padding="3" 
-          :class-names="{
-            'ais-pagination': 's_pagination',
-            'ais-pagination__item': 's_page',
-            'ais-pagination__item--active': 's_active',
-          }"
-          @page-change="onPageChange" />
-        <ais-no-results>
-          <template slot-scope="props">
-            No products found for <i>{{ props.query }}</i>.
-          </template>
-        </ais-no-results>
-      </div>
-    </div>
+    <v-container 
+      grid-list-md 
+      text-xs-center>
+      <v-layout 
+        row 
+        wrap>
+        <v-flex xs12>
+          <ais-input 
+            placeholder="Find products..." 
+            autofocus
+          />
+          <ais-results-per-page-selector :options="[20, 50, 100]" />
+          <ais-stats>
+            <template slot-scope="{ totalResults, processingTime, query, resultStart, resultEnd }">
+              <div>Showing {{ resultStart }} - {{ resultEnd }} of {{ totalResults }} results.</div>
+              <div>Your query: <b>{{ query }}</b> took {{ processingTime }}ms</div>
+            </template>
+          </ais-stats>
+        </v-flex>
+        <v-flex xs12>
+          <h3> Color</h3>
+          <ais-refinement-list attribute-name="color" />
+        </v-flex>
+        <v-flex xs12>
+          <ais-pagination 
+            :padding="3" 
+            :class-names="{
+              'ais-pagination': 's_pagination',
+              'ais-pagination__item': 's_page',
+              'ais-pagination__item--active': 's_active',
+            }"
+            @page-change="onPageChange" />
+          
+              <ais-results>
+                <ais-menu attribute="categories" />
+                <template slot-scope="{ result }">
+                  <SearchResult 
+                    :product = "result" 
+                    :key="result.id" />
+                </template>
+                <ais-pagination 
+                  :padding="3" 
+                  :class-names="{
+                    'ais-pagination': 's_pagination',
+                    'ais-pagination__item': 's_page',
+                    'ais-pagination__item--active': 's_active',
+                  }"
+                  @page-change="onPageChange" />
+              </ais-results>
+              <ais-no-results>
+                <template slot-scope="props">
+                  No products found for <i>{{ props.query }}</i>.
+                </template>
+              </ais-no-results>
+          
+        </v-flex>
+      </v-layout>
+    </v-container>
   </ais-index>
 </template>
 
@@ -71,7 +91,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
     .shift_left {
     color: darkslategrey;
     float: left;
@@ -100,4 +120,10 @@ export default {
     list-style: none;
     justify-content: space-around;
     }
+
+    .ais-refinement-list{
+      display: inline-block
+    }
+
+    .ais-refinement-list__item { display: inline-block; font-size: 12px; }
 </style>

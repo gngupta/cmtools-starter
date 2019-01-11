@@ -1,8 +1,7 @@
 <template>
-  <div id="footer">
-    <div id="title"><vue-markdown :source = "title" /></div>
+  <v-container>
     <div id="text"><vue-markdown :source = "text"/> </div>
-  </div>
+  </v-container>
 </template>
 
 <script>

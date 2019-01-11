@@ -1,28 +1,31 @@
 <template>
-  <div class="search-result-wrapper">
-    <router-link :to="{ name: 'product', params: { productSlug: product.slug } }">
-      <div class="search-result">
-        <table cellspacing="0">
-          <tr>
-            <td rowspan="2">
-              <img 
-                v-if="product.images !=null"
-                :src= "product.images" 
-                width="50" 
-                height="50" 
-              >
-            </td>
-            <td>{{ product.name }}</td>
-          </tr>
-          <tr>
-            <td>
-              {{ getFirstPrice(product.prices) }}
-            </td>
-          </tr>
-        </table>
-      </div>
-    </router-link>
-  </div>
+  <v-flex>
+    <v-card>
+      <v-layout row>
+        <v-flex xs4>
+          <v-card-title primary-title>
+            <router-link
+              :to="{ name: 'product', params: { productSlug: product.slug, locale: this.$store.getters.locale, productID: product.id } }"
+            >
+              <div>
+                <div class="headline">{{ product.name }}</div>
+                <div>{{ getFirstPrice(product.prices) }}</div>
+              </div>
+            </router-link>
+          </v-card-title>
+        </v-flex>
+        <v-flex xs8>
+          <v-img
+            v-if="product.images != null"
+            :src="product.images"
+            width="150"
+            height="150"
+            contain
+          />
+        </v-flex>
+      </v-layout>
+    </v-card>
+  </v-flex>
 </template>
 
 <script>

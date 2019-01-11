@@ -1,12 +1,11 @@
 <template>
   <div id="container">
-    <b-container>
-      <Header :show-cart="true"/>
+    <v-container>
       <div id="body">
         <ProductListing :slug="categorySlug"/>
       </div>
-      <Footer/>
-    </b-container>
+      
+    </v-container>
   </div>
 </template>
 

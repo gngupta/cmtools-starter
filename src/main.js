@@ -15,6 +15,9 @@ import InstantSearch from 'vue-instantsearch'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Vuelidate from 'vuelidate'
+import Vuetify from 'vuetify'
+
+import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 const authMiddleware = createAuthMiddlewareForAnonymousSessionFlow(settings.ct.auth);
 
@@ -29,6 +32,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
 Vue.use(InstantSearch);
+Vue.use(Vuetify)
 
 new Vue({
   router,
