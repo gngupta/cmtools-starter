@@ -3,7 +3,7 @@
     <div id="header">
       <b-container>
         <b-row>
-          <b-col>{{ $t('common.storeName') }}</b-col>
+          <b-col>{{ $t('common.storeName') }} test </b-col>
           <b-col>
             <LanguageSwitch/>
             <Minicart v-if="showCart"/>
