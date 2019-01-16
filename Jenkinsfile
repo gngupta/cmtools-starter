@@ -16,6 +16,36 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 				checkout scm
 			}
 
+			// Load pipeline utils and set global variables.
+			def rootDir = pwd()
+			println "rootDir :: ${rootDir}"
+			def pipelineUtil = load "${rootDir}/artifacts/cicd/PipelineUtil.groovy"
+
+			def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
+			println "chartDir :: ${chartDir}"
+			
+			// Read required jenkins workflow configuration values
+    		def inputFile = readFile('Jenkinsfile.json')
+    		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
+    		println "pipeline config ==> ${config}"
+
+			// set additional git envvars for image tagging
+			pipelineUtil.gitEnvVars()
+
+			// If pipeline debugging enabled
+			if (config.pipeline.debug) {
+				println "DEBUG ENABLED"
+				sh "env | sort"
+
+				println "Runing kubectl/helm tests"
+				container('kubectl') {
+					pipelineUtil.kubectlTest()
+				}
+				container('helm') {
+					pipelineUtil.helmConfig()
+				}
+			}
+
 			stage('Build') {
 				container('docker') {
 					sh "docker build . -t gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
@@ -35,8 +65,8 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			}
 
 			stage('Deploy') {
-				container('kubectl') {
-					sh "kubectl set image deployment/cmtools-deployment cmtools-app=gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER} -n=cmtools-system"
+				container('helm') {
+					sh "helm --name=cmtools-app --namespace=cmtools-system install ${chartDir}"
 				}
 			}
 	}

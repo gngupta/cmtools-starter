@@ -1,9 +1,7 @@
 {
   "app": {
     "name": "cmtools-app",
-    "replicas": "3",
-    "cpu": "10m",
-    "memory": "128Mi",
+    "replicas": "4",
     "test": true,
     "hostname": "croc-hunter.acs.az.estrado.io"
   },
