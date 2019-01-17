@@ -2,8 +2,7 @@
   "app": {
     "name": "cmtools-app",
     "replicas": "4",
-    "test": true,
-    "hostname": "croc-hunter.acs.az.estrado.io"
+    "test": true
   },
   "container_repo": {
     "host": "docker.io",

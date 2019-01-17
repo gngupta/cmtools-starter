@@ -12,73 +12,90 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 	node('jenkins-pipeline') {
 
-			stage('Checkout') {
-				checkout scm
+		stage('Checkout') {
+			checkout scm
+		}
+
+		// Load pipeline utils and set global variables.
+		def rootDir = pwd()
+		println "rootDir :: ${rootDir}"
+		def pipelineUtil = load "${rootDir}/artifacts/cicd/PipelineUtil.groovy"
+
+		def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
+		println "chartDir :: ${chartDir}"
+
+		// Read required jenkins workflow configuration values
+		def inputFile = readFile('Jenkinsfile.json')
+		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
+		println "pipeline config ==> ${config}"
+
+		// set additional git envvars for image tagging
+		pipelineUtil.setGitEnvVars()
+
+		// If pipeline debugging enabled
+		if (config.pipeline.debug) {
+			println "DEBUG ENABLED"
+			sh "env | sort"
+
+			println "Runing kubectl/helm tests"
+			container('kubectl') {
+				pipelineUtil.kubectlTest()
 			}
+			container('helm') {
+				pipelineUtil.helmConfig()
+			}
+		}
 
-			// Load pipeline utils and set global variables.
-			def rootDir = pwd()
-			println "rootDir :: ${rootDir}"
-			def pipelineUtil = load "${rootDir}/artifacts/cicd/PipelineUtil.groovy"
+		// set additional git envvars for image tagging
+		pipelineUtil.setGitEnvVars()
 
-			def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
-			println "chartDir :: ${chartDir}"
-			
-			// Read required jenkins workflow configuration values
-    		def inputFile = readFile('Jenkinsfile.json')
-    		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
-    		println "pipeline config ==> ${config}"
+		def acct = pipelineUtil.getContainerRepoAcct(config)
 
-			// set additional git envvars for image tagging
-			pipelineUtil.setGitEnvVars()
+		// tag image with version, and branch-commit_id
+		def image_tags_map = pipelineUtil.getContainerTags(config)
 
-			// If pipeline debugging enabled
-			if (config.pipeline.debug) {
-				println "DEBUG ENABLED"
-				sh "env | sort"
+		// compile tag list
+		def image_tags_list = pipelineUtil.getMapValues(image_tags_map)
 
-				println "Runing kubectl/helm tests"
-				container('kubectl') {
-					pipelineUtil.kubectlTest()
+		stage('Test deployment') {
+			container('helm') {
+				// run helm chart linter
+				pipelineUtil.helmLint(chart_dir)
+				// run dry-run helm chart installation
+				pipelineUtil.helmDeploy(
+					dry_run: true,
+					name: config.app.name,
+					namespace: config.app.name,
+					chart_dir: chart_dir,
+					set: [
+						"imageTag": image_tags_list.get(0),
+						"replicas": config.app.replicas
+					])
+			}
+		}
+
+		stage('Build') {
+			container('docker') {
+				sh "docker build . -t gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
+			}
+		}
+
+		stage('Test') {
+			println "TODO - extend pipline code to run test scripts"
+		}
+
+		stage('Push') {
+			container('docker') {
+				withDockerRegistry([credentialsId: "docker_hub_creds", url: ""]) {
+					sh "docker push gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
 				}
-				container('helm') {
-					pipelineUtil.helmConfig()
-				}
 			}
+		}
 
-			// set additional git envvars for image tagging
-    		pipelineUtil.setGitEnvVars()
-
-			def acct = pipelineUtil.getContainerRepoAcct(config)
-
-			// tag image with version, and branch-commit_id
-			def image_tags_map = pipelineUtil.getContainerTags(config)
-
-			// compile tag list
-			def image_tags_list = pipelineUtil.getMapValues(image_tags_map)
-
-			stage('Build') {
-				container('docker') {
-					sh "docker build . -t gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
-				}
+		stage('Deploy') {
+			container('helm') {
+				sh "helm --name=cmtools-app --namespace=cmtools-system install ${chartDir}"
 			}
-
-			stage('Test'){
-				println "TODO - extend pipline code to run test scripts"
-			}
-
-			stage('Push') {
-				container('docker') {
-					withDockerRegistry([ credentialsId: "docker_hub_creds", url: "" ]) {
-          				sh "docker push gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
-       				}
-				}	
-			}
-
-			stage('Deploy') {
-				container('helm') {
-					sh "helm --name=cmtools-app --namespace=cmtools-system install ${chartDir}"
-				}
-			}
+		}
 	}
 }
