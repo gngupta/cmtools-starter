@@ -4,6 +4,8 @@
 .git
 .gitignore
 .gitlab-ci2.yml
+artifacts
+!artifacts/nginx
 dist
 Dockerfile
 Jenkinsfile*
