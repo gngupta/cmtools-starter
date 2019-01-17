@@ -104,8 +104,8 @@ def getImageTag() {
 def getBuildArgs() {
     def buildArgs = " --build-arg VCS_REF=" + env.GIT_SHA
     buildArgs += " --build-arg VCS_URL=" + env.GIT_REMOTE_URL
-    buildArgs += " --build-arg VCS_BRANCH=" env.BRANCH_NAME
-    buildArgs += " --build-arg BUILD_NUMBER=" env.BUILD_NUMBER
+    buildArgs += " --build-arg VCS_BRANCH=" +  env.BRANCH_NAME
+    buildArgs += " --build-arg BUILD_NUMBER=" + env.BUILD_NUMBER
     buildArgs += " --build-arg BUILD_DATE=`date -u +'%Y-%m-%dT%H:%M:%S%Z'`"
     println "buildArgs :: " + buildArgs
     return buildArgs
