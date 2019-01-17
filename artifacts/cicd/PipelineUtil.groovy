@@ -98,7 +98,7 @@ def getContainerRepoAcct(config) {
 }
 
 def getImageTag() {
-    return ${env.BRANCH_NAME} + "_" + ${env.BUILD_NUMBER}
+    return env.BRANCH_NAME + "_" + env.BUILD_NUMBER
 }
 
 def buildImage(Map args) {
