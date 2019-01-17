@@ -12,4 +12,5 @@ Jenkinsfile*
 node_modules
 README.md
 selenium-debug.log
+tests/e2e/reports
 wunderman-commerce-deploy.yml
