@@ -57,20 +57,17 @@ def helmDeploy(Map args) {
 
 def helmDelete(Map args) {
     println "Running helm delete ${args.name}"
-
     sh "helm delete ${args.name}"
 }
 
 def helmTest(Map args) {
     println "Running Helm test"
-
     sh "helm test ${args.name} --cleanup"
 }
 
 def setGitEnvVars() {
     // create git envvars
     println "Setting envvars to tag container"
-
     sh 'git rev-parse HEAD > git_commit_id.txt'
     try {
         env.GIT_COMMIT_ID = readFile('git_commit_id.txt').trim()
@@ -101,7 +98,7 @@ def getContainerRepoAcct(config) {
 }
 
 def getImageTag() {
-    return ${env.BRANCH_NAME}_${env.BUILD_NUMBER}
+    return ${env.BRANCH_NAME} + "_" + ${env.BUILD_NUMBER}
 }
 
 def buildImage(Map args) {
