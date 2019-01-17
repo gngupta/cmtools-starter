@@ -5,8 +5,8 @@
 replicaCount: 4
 
 image:
-  repository: gorakh/cmtools-app
-  tag: latest
+  repository: nginx
+  tag: stable-alpine
   pullPolicy: IfNotPresent
 
 nameOverride: ""
