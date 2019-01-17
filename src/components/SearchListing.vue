@@ -37,27 +37,27 @@
             }"
             @page-change="onPageChange" />
           
-              <ais-results>
-                <ais-menu attribute="categories" />
-                <template slot-scope="{ result }">
-                  <SearchResult 
-                    :product = "result" 
-                    :key="result.id" />
-                </template>
-                <ais-pagination 
-                  :padding="3" 
-                  :class-names="{
-                    'ais-pagination': 's_pagination',
-                    'ais-pagination__item': 's_page',
-                    'ais-pagination__item--active': 's_active',
-                  }"
-                  @page-change="onPageChange" />
-              </ais-results>
-              <ais-no-results>
-                <template slot-scope="props">
-                  No products found for <i>{{ props.query }}</i>.
-                </template>
-              </ais-no-results>
+          <ais-results>
+            <ais-menu attribute="categories" />
+            <template slot-scope="{ result }">
+              <SearchResult 
+                :product = "result" 
+                :key="result.id" />
+            </template>
+            <ais-pagination 
+              :padding="3" 
+              :class-names="{
+                'ais-pagination': 's_pagination',
+                'ais-pagination__item': 's_page',
+                'ais-pagination__item--active': 's_active',
+              }"
+              @page-change="onPageChange" />
+          </ais-results>
+          <ais-no-results>
+            <template slot-scope="props">
+              No products found for <i>{{ props.query }}</i>.
+            </template>
+          </ais-no-results>
           
         </v-flex>
       </v-layout>
