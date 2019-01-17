@@ -118,6 +118,12 @@ def buildImage(Map args) {
     }
 }
 
+def pushImage(Map args) {
+    docker.withRegistry("https://${args.host}", "${args.authId}") {
+        sh "docker push ${args.acct}/${args.repo}:${args.imageTag}"
+    }
+}
+
 @NonCPS
 def getHelmReleaseOverrides(Map map = [ : ]) {
     // jenkins and workflow restriction force this function instead of map.each(): https://issues.jenkins-ci.org/browse/JENKINS-27421

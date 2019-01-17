@@ -1,0 +1,13 @@
+# build stage
+FROM node:8.14.0-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+# Metadata
+ARG VCS_REF
+ARG VCS_URL
+ARG VCS_BRANCH
+ARG BUILD_DATE
+ARG BUILD_NUMBER
+LABEL vcs-ref=$VCS_REF vcs-url=$VCS_URL vcs-branch=$VCS_BRANCH build-date=$BUILD_DATE build-number=$BUILD_NUMBER maintainer="salmon.com"
