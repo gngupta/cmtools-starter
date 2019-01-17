@@ -60,13 +60,13 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		stage('Test deployment') {
 			container('helm') {
 				// run helm chart linter
-				pipelineUtil.helmLint(chart_dir)
+				pipelineUtil.helmLint(chartDir)
 				// run dry-run helm chart installation
 				pipelineUtil.helmDeploy(
 					dry_run: true,
 					name: config.app.name,
 					namespace: config.app.name,
-					chart_dir: chart_dir,
+					chart_dir: chartDir,
 					set: [
 						"imageTag": image_tags_list.get(0),
 						"replicas": config.app.replicas
