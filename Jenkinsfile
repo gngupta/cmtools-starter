@@ -70,13 +70,14 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 		stage('Build') {
 			container('docker') {
-				 pipelineUtil.buildImage(
+				pipelineUtil.buildImage(
 					dockerfile: config.container_repo.dockerfile,
 					host      : config.container_repo.host,
 					acct      : acct,
 					repo      : config.container_repo.repo,
-					auth_id   : config.container_repo.jenkins_creds_id,
+					authId    : config.container_repo.jenkins_creds_id,
 					imageTag  : imageTag
+					buildArgs : pipelineUtil.getBuildArgs()
 				)
 			}
 		}

@@ -101,14 +101,24 @@ def getImageTag() {
     return env.BRANCH_NAME + "_" + env.BUILD_NUMBER
 }
 
+def getBuildArgs() {
+    def buildArgs = " --build-arg VCS_REF=" + env.GIT_SHA
+    buildArgs += " --build-arg VCS_URL=" + env.GIT_REMOTE_URL
+    buildArgs += " --build-arg VCS_BRANCH=" env.BRANCH_NAME
+    buildArgs += " --build-arg BUILD_NUMBER=" env.BUILD_NUMBER
+    buildArgs += " --build-arg BUILD_DATE=`date -u +'%Y-%m-%dT%H:%M:%S%Z'`"
+    println "buildArgs :: " + buildArgs
+    return buildArgs
+}
+
 def buildImage(Map args) {
-    docker.withRegistry("https://${args.host}", "${args.auth_id}") {
-        sh "docker build ${args.dockerfile} -t ${args.acct}/${args.repo}:${args.imageTag} --build-arg VCS_REF=${env.GIT_SHA} --build-arg VCS_URL=${env.GIT_REMOTE_URL} --build-arg VCS_BRANCH=${env.BRANCH_NAME} --build-arg BUILD_NUMBER=${env.BUILD_NUMBER} --build-arg BUILD_DATE=`date -u +'%Y-%m-%dT%H:%M:%SZ'`"
+    docker.withRegistry("https://${args.host}", "${args.authId}") {
+        sh "docker build ${args.dockerfile} -t ${args.acct}/${args.repo}:${args.imageTag} ${args.buildArgs}"
     }
 }
 
 @NonCPS
-def getHelmReleaseOverrides(Map map = [: ]) {
+def getHelmReleaseOverrides(Map map = [ : ]) {
     // jenkins and workflow restriction force this function instead of map.each(): https://issues.jenkins-ci.org/browse/JENKINS-27421
     def options = ""
     map.each { key, value ->
