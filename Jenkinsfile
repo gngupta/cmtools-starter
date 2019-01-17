@@ -76,26 +76,19 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 		stage('Build') {
 			container('docker') {
-				sh "docker build . -t gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
+				 pipelineUtil.containerBuildPub(
+					dockerfile: config.container_repo.dockerfile,
+					host      : config.container_repo.host,
+					acct      : acct,
+					repo      : config.container_repo.repo,
+					tags      : image_tags_list,
+					auth_id   : config.container_repo.jenkins_creds_id,
+					image_scanning: config.container_repo.image_scanning
+				)
 			}
 		}
 
-		stage('Test') {
-			println "TODO - extend pipline code to run test scripts"
-		}
 
-		stage('Push') {
-			container('docker') {
-				withDockerRegistry([credentialsId: "docker_hub_creds", url: ""]) {
-					sh "docker push gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
-				}
-			}
-		}
 
-		stage('Deploy') {
-			container('helm') {
-				sh "helm --name=cmtools-app --namespace=cmtools-system install ${chartDir}"
-			}
-		}
 	}
 }
