@@ -51,23 +51,6 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		def acct = pipelineUtil.getContainerRepoAcct(config)
 		def imageTag = pipelineUtil.getImageTag()
 
-		stage('Test deployment') {
-			container('helm') {
-				// run helm chart linter
-				pipelineUtil.helmLint(chartDir)
-				// run dry-run helm chart installation
-				pipelineUtil.helmDeploy(
-					dry_run: true,
-					name: config.app.name,
-					namespace: config.app.name,
-					chart_dir: chartDir,
-					set: [
-						"imageTag": imageTag,
-						"replicas": config.app.replicas
-					])
-			}
-		}
-
 		stage('Install') {
 			container('docker') {
 				pipelineUtil.buildImage(
@@ -83,6 +66,20 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		}
 
 		stage('Build') {
+			container('docker') {
+				pipelineUtil.buildImage(
+					dockerfile: "./Dockerfile.build",
+					host      : config.container_repo.host,
+					acct      : acct,
+					repo      : config.container_repo.repo + "-build",
+					authId    : config.container_repo.jenkins_creds_id,
+					imageTag  : imageTag,
+					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg FROM_CMTOOLS_INSTALL=" + acct + "/" + config.container_repo.repo + "-install:" + imageTag
+				)
+			}
+		}
+
+		stage('Ship') {
 			container('docker') {
 				pipelineUtil.buildImage(
 					dockerfile: "./Dockerfile",

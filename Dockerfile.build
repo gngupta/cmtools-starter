@@ -1,9 +1,7 @@
-# build stage
-FROM node:8.14.0-alpine
+ARG FROM_CMTOOLS_INSTALL
+FROM $FROM_CMTOOLS_INSTALL
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+RUN npm run build
 # Metadata
 ARG VCS_REF
 ARG VCS_URL
