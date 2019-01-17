@@ -36,7 +36,6 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		if (config.pipeline.debug) {
 			println "DEBUG ENABLED"
 			sh "env | sort"
-
 			println "Runing kubectl/helm tests"
 			container('kubectl') {
 				pipelineUtil.kubectlTest()
@@ -50,12 +49,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		pipelineUtil.setGitEnvVars()
 
 		def acct = pipelineUtil.getContainerRepoAcct(config)
-
-		// tag image with version, and branch-commit_id
-		def image_tags_map = pipelineUtil.getContainerTags(config)
-
-		// compile tag list
-		def image_tags_list = pipelineUtil.getMapValues(image_tags_map)
+		def imageTag = pipelineUtil.getImageTag()
 
 		stage('Test deployment') {
 			container('helm') {
@@ -68,7 +62,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					namespace: config.app.name,
 					chart_dir: chartDir,
 					set: [
-						"imageTag": image_tags_list.get(0),
+						"imageTag": imageTag,
 						"replicas": config.app.replicas
 					])
 			}
@@ -76,19 +70,15 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 		stage('Build') {
 			container('docker') {
-				 pipelineUtil.containerBuildPub(
+				 pipelineUtil.buildImage(
 					dockerfile: config.container_repo.dockerfile,
 					host      : config.container_repo.host,
 					acct      : acct,
 					repo      : config.container_repo.repo,
-					tags      : image_tags_list,
 					auth_id   : config.container_repo.jenkins_creds_id,
-					image_scanning: config.container_repo.image_scanning
+					imageTag  : imageTag
 				)
 			}
 		}
-
-
-
 	}
 }
