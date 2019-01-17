@@ -76,7 +76,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					acct      : acct,
 					repo      : config.container_repo.repo,
 					authId    : config.container_repo.jenkins_creds_id,
-					imageTag  : imageTag
+					imageTag  : imageTag,
 					buildArgs : pipelineUtil.getBuildArgs()
 				)
 			}
