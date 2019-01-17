@@ -83,7 +83,7 @@ def setGitEnvVars() {
     } catch (e) {
         error "${e}"
     }
-    sh "rm git_commit_id.txt,git_remote_origin_url.txt"
+    sh "rm -f git_commit_id.txt git_remote_origin_url.txt"
     println "env.GIT_REMOTE_URL ==> ${env.GIT_REMOTE_URL}"
 }
 
