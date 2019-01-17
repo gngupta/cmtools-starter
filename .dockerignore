@@ -7,7 +7,7 @@
 artifacts
 !artifacts/nginx
 dist
-Dockerfile
+Dockerfile*
 Jenkinsfile*
 node_modules
 README.md

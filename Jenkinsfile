@@ -74,7 +74,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					repo      : config.container_repo.repo + "-build",
 					authId    : config.container_repo.jenkins_creds_id,
 					imageTag  : imageTag,
-					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg FROM_CMTOOLS_INSTALL=" + acct + "/" + config.container_repo.repo + "-install:" + imageTag
+					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg CMTOOLS_INSTALL_IMAGE=" + acct + "/" + config.container_repo.repo + "-install:" + imageTag
 				)
 			}
 		}
@@ -82,13 +82,13 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		stage('Ship') {
 			container('docker') {
 				pipelineUtil.buildImage(
-					dockerfile: "./Dockerfile",
+					dockerfile: "./Dockerfile.ship",
 					host      : config.container_repo.host,
 					acct      : acct,
 					repo      : config.container_repo.repo,
 					authId    : config.container_repo.jenkins_creds_id,
 					imageTag  : imageTag,
-					buildArgs : pipelineUtil.getBuildArgs()
+					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg CMTOOLS_BUILD_IMAGE=" + acct + "/" + config.container_repo.repo + "-build:" + imageTag
 				)
 			}
 		}
