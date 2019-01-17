@@ -6,7 +6,9 @@ ARG BUILD_DATE
 # Metadata
 LABEL vcs-ref=$VCS_REF \
       vcs-url="https://gitlab2.salnl.net/commercetools/starter" \
-      build-date=$BUILD_DATE
+      build-date=$BUILD_DATE \
+      maintainer="salmon.com"
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -22,7 +24,8 @@ ARG BUILD_DATE
 # Metadata
 LABEL vcs-ref=$VCS_REF \
       vcs-url="https://gitlab2.salnl.net/commercetools/starter" \
-      build-date=$BUILD_DATE
+      build-date=$BUILD_DATE \
+      maintainer="salmon.com"
 
 COPY ./artifacts/nginx/conf.d/default.conf /etc/nginx/conf.d
 COPY --from=build-stage /app/dist /usr/share/nginx/html
