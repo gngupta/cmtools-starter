@@ -12,12 +12,7 @@ ARG VCS_URL
 ARG VCS_BRANCH
 ARG BUILD_DATE
 ARG BUILD_NUMBER
-LABEL vcs-ref=$VCS_REF \
-      vcs-url=$VCS_URL \
-      vcs-branch=$VCS_BRANCH \
-      build-date=$BUILD_DATE \
-      build-number=$BUILD_NUMBER \
-      maintainer="salmon.com"
+LABEL vcs-ref=$VCS_REF vcs-url=$VCS_URL vcs-branch=$VCS_BRANCH build-date=$BUILD_DATE build-number=$BUILD_NUMBER maintainer="salmon.com"
 
 # deploy stage
 FROM nginx:stable-alpine as deploy-stage
@@ -29,12 +24,6 @@ ARG VCS_URL
 ARG VCS_BRANCH
 ARG BUILD_DATE
 ARG BUILD_NUMBER
-LABEL vcs-ref=$VCS_REF \
-      vcs-url=$VCS_URL \
-      vcs-branch=$VCS_BRANCH \
-      build-date=$BUILD_DATE \
-      build-number=$BUILD_NUMBER \
-      maintainer="salmon.com"
-
+LABEL vcs-ref=$VCS_REF vcs-url=$VCS_URL vcs-branch=$VCS_BRANCH build-date=$BUILD_DATE build-number=$BUILD_NUMBER maintainer="salmon.com"
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
