@@ -30,7 +30,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
     		println "pipeline config ==> ${config}"
 
 			// set additional git envvars for image tagging
-			pipelineUtil.gitEnvVars()
+			pipelineUtil.setGitEnvVars()
 
 			// If pipeline debugging enabled
 			if (config.pipeline.debug) {
