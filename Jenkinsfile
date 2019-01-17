@@ -71,7 +71,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		stage('Install') {
 			container('docker') {
 				pipelineUtil.buildImage(
-					dockerfile: "-f ./Dockerfile.install",
+					dockerfile: "./Dockerfile.install",
 					host      : config.container_repo.host,
 					acct      : acct,
 					repo      : config.container_repo.repo + "-install",
@@ -85,7 +85,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		stage('Build') {
 			container('docker') {
 				pipelineUtil.buildImage(
-					dockerfile: config.container_repo.dockerfile,
+					dockerfile: "./Dockerfile",
 					host      : config.container_repo.host,
 					acct      : acct,
 					repo      : config.container_repo.repo,

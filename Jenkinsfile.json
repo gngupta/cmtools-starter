@@ -9,10 +9,7 @@
     "master_acct": "gorakh",
     "alt_acct": "gorakh",
     "jenkins_creds_id": "docker_hub_creds",
-    "repo": "cmtools-app",
-    "dockeremail": ".",
-    "dockerfile": "./",
-    "image_scanning": false
+    "repo": "cmtools-app"
   },
   "pipeline": {
     "enabled": true,
