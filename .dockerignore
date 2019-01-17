@@ -6,6 +6,7 @@
 .gitlab-ci2.yml
 dist
 Dockerfile
+Jenkinsfile*
 node_modules
 README.md
 selenium-debug.log

@@ -46,6 +46,17 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 				}
 			}
 
+			// set additional git envvars for image tagging
+    		pipelineUtil.setGitEnvVars()
+
+			def acct = pipelineUtil.getContainerRepoAcct(config)
+
+			// tag image with version, and branch-commit_id
+			def image_tags_map = pipelineUtil.getContainerTags(config)
+
+			// compile tag list
+			def image_tags_list = pipelineUtil.getMapValues(image_tags_map)
+
 			stage('Build') {
 				container('docker') {
 					sh "docker build . -t gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"

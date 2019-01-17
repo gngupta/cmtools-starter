@@ -17,6 +17,6 @@
   },
   "pipeline": {
     "enabled": true,
-    "debug": true
+    "debug": false
   }
 }
