@@ -99,12 +99,12 @@ def getCommonBuildArgs() {
 }
 
 def buildImage(Map args) {
-    println "docker build . -t ${args.imageName}:${args.imageTag} -f ${args.dockerfile} ${args.buildArgs}"
+    println "Build docker image : ${args.imageName}:${args.imageTag}"
     sh "docker build . -t ${args.imageName}:${args.imageTag} -f ${args.dockerfile} ${args.buildArgs}"
 }
 
 def pushImage(Map args) {
-    println "docker push ${args.imageName}:${args.imageTag}"
+    println "Push docker image : ${args.imageName}:${args.imageTag}"
     withDockerRegistry([credentialsId: "docker_hub_creds", url: ""]) {
         sh "docker push ${args.imageName}:${args.imageTag}"
     }
@@ -112,7 +112,6 @@ def pushImage(Map args) {
 
 @NonCPS
 def getHelmReleaseOverrides(Map map = [ : ]) {
-    // jenkins and workflow restriction force this function instead of map.each(): https://issues.jenkins-ci.org/browse/JENKINS-27421
     def options = ""
     map.each { key, value ->
         options += "$key=$value,"
