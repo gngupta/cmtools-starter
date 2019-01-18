@@ -32,22 +32,6 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		// set additional git envvars for image tagging
 		pipelineUtil.setGitEnvVars()
 
-		// If pipeline debugging enabled
-		if (config.pipeline.debug) {
-			println "DEBUG ENABLED"
-			sh "env | sort"
-			println "Runing kubectl/helm tests"
-			container('kubectl') {
-				pipelineUtil.kubectlTest()
-			}
-			container('helm') {
-				pipelineUtil.helmConfig()
-			}
-		}
-
-		// set additional git envvars for image tagging
-		pipelineUtil.setGitEnvVars()
-
 		def acct = pipelineUtil.getContainerRepoAcct(config)
 		def imageTag = pipelineUtil.getImageTag()
 
