@@ -88,7 +88,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					namespace     : env.BRANCH_NAME.toLowerCase().replace("_", "-"),
 					chartDir      : chartDir,
 					set           : [
-						"imageTag": imageTag,
+						"image.tag": imageTag,
 						"replicas": config.app.replicas
 					]
 				)
