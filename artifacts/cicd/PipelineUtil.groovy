@@ -85,7 +85,9 @@ def setGitEnvVars() {
 }
 
 def getImageTag() {
-    return env.BRANCH_NAME + "_" + env.BUILD_NUMBER
+    def imageTag = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+    println "Common image tag :: ${imageTag}"
+    return imageTag
 }
 
 def getCommonBuildArgs() {
@@ -94,7 +96,7 @@ def getCommonBuildArgs() {
     commonBuildArgs += " --build-arg VCS_BRANCH=${env.BRANCH_NAME}"
     commonBuildArgs += " --build-arg BUILD_NUMBER=${env.BUILD_NUMBER}"
     commonBuildArgs += " --build-arg BUILD_DATE=`date -u +'%Y-%m-%dT%H:%M:%S%Z'`"
-    println "Common build args :: " + commonBuildArgs
+    println "Common build args :: ${commonBuildArgs}"
     return commonBuildArgs
 }
 
