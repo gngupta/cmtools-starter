@@ -63,7 +63,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					dockerfile: "./Dockerfile.package",
 					imageName: imageName,
 					imageTag: imageTag,
-					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_INSTALL_IMAGE=${buildImage}"
+					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_BUILD_IMAGE=${buildImage}"
 				])
 			}
 		}

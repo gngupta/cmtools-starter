@@ -99,12 +99,12 @@ def getCommonBuildArgs() {
 }
 
 def buildImage(Map args) {
-    println "Build docker image : ${args.imageName}:${args.imageTag}"
+    println "Build docker image :: ${args.imageName}:${args.imageTag}"
     sh "docker build . -t ${args.imageName}:${args.imageTag} -f ${args.dockerfile} ${args.buildArgs}"
 }
 
 def pushImage(Map args) {
-    println "Push docker image : ${args.imageName}:${args.imageTag}"
+    println "Push docker image :: ${args.imageName}:${args.imageTag}"
     withDockerRegistry([credentialsId: "docker_hub_creds", url: ""]) {
         sh "docker push ${args.imageName}:${args.imageTag}"
     }
