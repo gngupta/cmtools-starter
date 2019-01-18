@@ -84,8 +84,8 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			container('helm') {
 				pipelineUtil.helmDeploy(
 					dryRun        : false,
-					name          : env.BRANCH_NAME.toLowerCase(),
-					namespace     : env.BRANCH_NAME.toLowerCase(),
+					name          : env.BRANCH_NAME.toLowerCase().replace("_", "-"),
+					namespace     : env.BRANCH_NAME.toLowerCase().replace("_", "-"),
 					chartDir      : chartDir,
 					set           : [
 						"imageTag": imageTag,
