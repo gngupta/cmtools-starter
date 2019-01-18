@@ -2,12 +2,12 @@
   "app": {
     "name": "cmtools-app",
     "replicas": "4",
-    "test": true
+    "version": "1.0"
   },
   "registry": {
     "host": "docker.io",
     "credentialsId": "docker_hub_creds",
-    "user":"gorakh",
+    "user": "gorakh",
     "repo": "cmtools-app"
   },
   "pipeline": {
