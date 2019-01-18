@@ -12,7 +12,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 	node('jenkins-pipeline') {
 
-		stage('Checkout') {
+		stage('Checkout Code') {
 			checkout scm
 		}
 
@@ -42,7 +42,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					dockerfile : "./Dockerfile.install",
 					imageName  : imageName + "-install",
 					imageTag   : imageTag,
-					buildArgs  : commonBuildArgs
+					buildArgs  : ""
 				)
 			}
 		}
@@ -53,7 +53,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					dockerfile : "./Dockerfile.build",
 					imageName  : imageName + "-build",
 					imageTag   : imageTag,
-					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_INSTALL_IMAGE=" + imageName + "-install:" + imageTag
+					buildArgs  : " --build-arg CMTOOLS_INSTALL_IMAGE=" + imageName + "-install:" + imageTag
 				)
 			}
 		}
