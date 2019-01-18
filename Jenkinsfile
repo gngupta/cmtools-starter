@@ -82,8 +82,11 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		// Helm chart directory to deploy app
 		def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
 		println "chartDir :: ${chartDir}"
+
 		stage('Deploy') {
 			container('helm') {
+				pipelineUtil.helmConfig()
+				pipelineUtil.helmLint(chartDir)
 				pipelineUtil.helmDeploy([
 					dryRun: false,
 					name: env.BRANCH_NAME.toLowerCase().replace("_", "-"),

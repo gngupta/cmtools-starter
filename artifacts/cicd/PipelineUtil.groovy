@@ -8,38 +8,28 @@ def kubectlTest() {
     sh "kubectl get pods --all-namespaces"
 }
 
-def helmLint(String chart_dir) {
+def helmTest() {
+    println "checking client/server version"
+    sh "helm version"
+}
+
+def helmLint(String chartDir) {
     // lint helm chart
-    println "running helm lint ${chart_dir}"
-    sh "helm lint ${chart_dir}"
+    println "Running helm lint ${chartDir}"
+    sh "helm lint ${chartDir}"
 
 }
 
 def helmConfig() {
     //setup helm connectivity to Kubernetes API and Tiller
-    println "initiliazing helm client"
+    println "Initiliazing helm client"
     sh "helm init"
-    println "checking client/server version"
-    sh "helm version"
 }
 
 
 def helmDeploy(Map args) {
-    //Configure helm client and confirm tiller process is installed.
-    helmConfig()
-    def String release_overrides = ""
-    if (args.set) {
-        release_overrides = getHelmReleaseOverrides(args.set)
-    }
-
-    def String namespace
-
-    // If namespace isn't parsed into the function set the namespace to the name
-    if (args.namespace == null) {
-        namespace = args.name
-    } else {
-        namespace = args.namespace
-    }
+    def String release_overrides = args.set ? getHelmReleaseOverrides(args.set) : ""
+    def String namespace = args.namespace ? args.namespace : args.name
 
     if (args.dryRun) {
         println "Running dry-run deployment"
@@ -65,7 +55,7 @@ def helmTest(Map args) {
 def setGitEnvVars() {
     // create git envvars
     println "Setting env vars to tag container"
-    sh 'git rev-parse HEAD > git_commit_id.txt'
+    sh "git rev-parse HEAD > git_commit_id.txt"
     try {
         env.GIT_COMMIT_ID = readFile('git_commit_id.txt').trim()
         env.GIT_SHA = env.GIT_COMMIT_ID.substring(0, 7)
@@ -74,7 +64,7 @@ def setGitEnvVars() {
     }
     println "env.GIT_COMMIT_ID ==> ${env.GIT_COMMIT_ID}"
 
-    sh 'git config --get remote.origin.url> git_remote_origin_url.txt'
+    sh "git config --get remote.origin.url> git_remote_origin_url.txt"
     try {
         env.GIT_REMOTE_URL = readFile('git_remote_origin_url.txt').trim()
     } catch (e) {
