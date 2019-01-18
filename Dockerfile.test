@@ -1,7 +1,7 @@
 ARG FROM_CMTOOLS_INSTALL
 FROM $FROM_CMTOOLS_INSTALL
 WORKDIR /app
-RUN npm run build
+RUN npm run test:e2e
 # Metadata
 ARG VCS_REF
 ARG VCS_URL
