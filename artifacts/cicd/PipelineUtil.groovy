@@ -58,13 +58,13 @@ def helmDelete(Map args) {
 }
 
 def helmTest(Map args) {
-    println "Running Helm test"
+    println "Running helm test"
     sh "helm test ${args.name} --cleanup"
 }
 
 def setGitEnvVars() {
     // create git envvars
-    println "Setting envvars to tag container"
+    println "Setting env vars to tag container"
     sh 'git rev-parse HEAD > git_commit_id.txt'
     try {
         env.GIT_COMMIT_ID = readFile('git_commit_id.txt').trim()

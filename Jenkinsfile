@@ -21,13 +21,10 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		println "rootDir :: ${rootDir}"
 		def pipelineUtil = load "${rootDir}/artifacts/cicd/PipelineUtil.groovy"
 
-		def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
-		println "chartDir :: ${chartDir}"
-
 		// Read required jenkins workflow configuration values
 		def inputFile = readFile('Jenkinsfile.json')
 		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
-		println "pipeline config ==> ${config}"
+		println "Pipeline config ==> ${config}"
 
 		// Set additional git envvars for image tag and label
 		pipelineUtil.setGitEnvVars()
@@ -60,29 +57,33 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 		stage('Package') {
 			container('docker') {
-				pipelineUtil.buildImage(
+				pipelineUtil.buildImage([
 					dockerfile : "./Dockerfile.package",
 					imageName  : imageName + "-app",
 					imageTag   : imageTag,
 					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_BUILD_IMAGE=" + imageName + "-build:" + imageTag
-				)
+				])
 			}
 		}
 
 		stage('Push') {
 			container('docker') {
-				pipelineUtil.pushImage(
+				pipelineUtil.pushImage([
 					host          : config.registry.host,
 					credentialsId : config.registry.credentialsId,
 					imageName     : imageName + "-app",
 					imageTag      : imageTag
-				)
+				])
 			}
 		}
 
+		// Helm chart directory to deploy app
+		def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
+		println "chartDir :: ${chartDir}"
+
 		stage('Deploy') {
 			container('helm') {
-				pipelineUtil.helmDeploy(
+				pipelineUtil.helmDeploy([
 					dryRun        : false,
 					name          : env.BRANCH_NAME.toLowerCase().replace("_", "-"),
 					namespace     : env.BRANCH_NAME.toLowerCase().replace("_", "-"),
@@ -91,7 +92,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 						"image.tag": imageTag,
 						"replicas": config.app.replicas
 					]
-				)
+				])
 			}
 		}
 
