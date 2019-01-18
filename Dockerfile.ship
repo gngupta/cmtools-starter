@@ -1,7 +1,9 @@
-FROM nginx:stable-alpine
-COPY ./artifacts/nginx/conf.d/default.conf /etc/nginx/conf.d
 ARG CMTOOLS_BUILD_IMAGE
-COPY --from=$CMTOOLS_BUILD_IMAGE /app/dist /usr/share/nginx/html
+FROM $CMTOOLS_BUILD_IMAGE as build-stage
+
+FROM nginx:stable-alpine as deploy-stage
+COPY ./artifacts/nginx/conf.d/default.conf /etc/nginx/conf.d
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 # Metadata
 ARG VCS_REF
 ARG VCS_URL
