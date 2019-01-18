@@ -106,7 +106,7 @@ def buildImage(Map args) {
 }
 
 def pushImage(Map args) {
-    docker.withRegistry("https://${args.host}", "${args.credentialsId}") {
+    withDockerRegistry([credentialsId: "docker_hub_creds", url: ""]) {
         sh "docker push ${args.imageName}:${args.imageTag}"
     }
 }
