@@ -12,7 +12,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 	node('jenkins-pipeline') {
 
-		stage('Checkout Code') {
+		stage('Checkout') {
 			checkout scm
 		}
 
@@ -72,9 +72,10 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		stage('Push') {
 			container('docker') {
 				pipelineUtil.pushImage(
+					host          : config.registry.host,
+					credentialsId : config.registry.credentialsId,
 					imageName     : imageName + "-app",
-					imageTag      : imageTag,
-					credentialsId : config.registry.credentialsId
+					imageTag      : imageTag
 				)
 			}
 		}
