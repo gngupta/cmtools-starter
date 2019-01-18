@@ -29,64 +29,42 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
 		println "pipeline config ==> ${config}"
 
-		// set additional git envvars for image tagging
+		// set additional git envvars for image tag and label
 		pipelineUtil.setGitEnvVars()
-
-		def acct = pipelineUtil.getContainerRepoAcct(config)
+	
+		def imageName = config.registry.user + "/" + config.registry.repo
 		def imageTag = pipelineUtil.getImageTag()
+		def commonBuildArgs = pipelineUtil.getBuildArgs()
 
-		stage('Install') {
+		stage('Install Dependencies') {
 			container('docker') {
 				pipelineUtil.buildImage(
-					dockerfile: "./Dockerfile.install",
-					host      : config.container_repo.host,
-					acct      : acct,
-					repo      : config.container_repo.repo + "-install",
-					authId    : config.container_repo.jenkins_creds_id,
-					imageTag  : imageTag,
-					buildArgs : pipelineUtil.getBuildArgs()
+					dockerfile : "./Dockerfile.install",
+					imageName  : imageName + "-install-stage",
+					imageTag   : imageTag,
+					buildArgs  : commonBuildArgs
 				)
 			}
 		}
 
-		stage('Test') {
+		stage('Build Webpack') {
 			container('docker') {
 				pipelineUtil.buildImage(
-					dockerfile: "./Dockerfile.test",
-					host      : config.container_repo.host,
-					acct      : acct,
-					repo      : config.container_repo.repo + "-test",
-					authId    : config.container_repo.jenkins_creds_id,
-					imageTag  : imageTag,
-					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg CMTOOLS_INSTALL_IMAGE=" + acct + "/" + config.container_repo.repo + "-install:" + imageTag
+					dockerfile : "./Dockerfile.build",
+					imageName  : imageName + "-build-stage",
+					imageTag   : imageTag,
+					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_INSTALL_IMAGE=" + imageName + "-install-stage:" + imageTag
 				)
 			}
 		}
 
-		stage('Build') {
+		stage('Package Webpack') {
 			container('docker') {
 				pipelineUtil.buildImage(
-					dockerfile: "./Dockerfile.build",
-					host      : config.container_repo.host,
-					acct      : acct,
-					repo      : config.container_repo.repo + "-build",
-					authId    : config.container_repo.jenkins_creds_id,
-					imageTag  : imageTag,
-					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg CMTOOLS_INSTALL_IMAGE=" + acct + "/" + config.container_repo.repo + "-install:" + imageTag
-				)
-			}
-		}
-
-		stage('Ship') {
-			container('docker') {
-				pipelineUtil.buildImage(
-					dockerfile: "./Dockerfile.ship",
-					host      : config.container_repo.host,
-					acct      : acct,
-					repo      : config.container_repo.repo,
-					authId    : config.container_repo.jenkins_creds_id,
-					imageTag  : imageTag,
-					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg CMTOOLS_BUILD_IMAGE=" + acct + "/" + config.container_repo.repo + "-build:" + imageTag
+					dockerfile : "./Dockerfile.package",
+					imageName  : imageName + "-app",
+					imageTag   : imageTag,
+					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_BUILD_IMAGE=" + imageName + "-build-stage:" + imageTag
 				)
 			}
 		}

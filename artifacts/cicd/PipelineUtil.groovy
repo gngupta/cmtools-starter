@@ -87,17 +87,6 @@ def setGitEnvVars() {
     println "env.GIT_REMOTE_URL ==> ${env.GIT_REMOTE_URL}"
 }
 
-def getContainerRepoAcct(config) {
-    println "setting container registry creds according to Jenkinsfile.json"
-    def String acct
-    if (env.BRANCH_NAME == 'master') {
-        acct = config.container_repo.master_acct
-    } else {
-        acct = config.container_repo.alt_acct
-    }
-    return acct
-}
-
 def getImageTag() {
     return env.BRANCH_NAME + "_" + env.BUILD_NUMBER
 }
@@ -117,7 +106,7 @@ def buildImage(Map args) {
 }
 
 def pushImage(Map args) {
-    docker.withRegistry("https://${args.host}", "${args.authId}") {
+    docker.withRegistry("https://${args.host}", "${args.credentialsId}") {
         sh "docker push ${args.acct}/${args.repo}:${args.imageTag}"
     }
 }

@@ -4,12 +4,11 @@
     "replicas": "4",
     "test": true
   },
-  "container_repo": {
+  "registry": {
     "host": "docker.io",
-    "master_acct": "gorakh",
-    "alt_acct": "gorakh",
-    "jenkins_creds_id": "docker_hub_creds",
-    "repo": "cmtools-app"
+    "credentialsId": "docker_hub_creds",
+    "user":"gorakh",
+    "repo": "cmtools"
   },
   "pipeline": {
     "enabled": true,
