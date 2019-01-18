@@ -40,7 +40,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			container('docker') {
 				pipelineUtil.buildImage(
 					dockerfile : "./Dockerfile.install",
-					imageName  : imageName + "-install-stage",
+					imageName  : imageName + "-install",
 					imageTag   : imageTag,
 					buildArgs  : commonBuildArgs
 				)
@@ -51,9 +51,9 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			container('docker') {
 				pipelineUtil.buildImage(
 					dockerfile : "./Dockerfile.build",
-					imageName  : imageName + "-build-stage",
+					imageName  : imageName + "-build",
 					imageTag   : imageTag,
-					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_INSTALL_IMAGE=" + imageName + "-install-stage:" + imageTag
+					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_INSTALL_IMAGE=" + imageName + "-install:" + imageTag
 				)
 			}
 		}
@@ -64,7 +64,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					dockerfile : "./Dockerfile.package",
 					imageName  : imageName + "-app",
 					imageTag   : imageTag,
-					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_BUILD_IMAGE=" + imageName + "-build-stage:" + imageTag
+					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_BUILD_IMAGE=" + imageName + "-build:" + imageTag
 				)
 			}
 		}
