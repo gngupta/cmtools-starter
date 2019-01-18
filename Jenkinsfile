@@ -82,7 +82,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 		stage('Deploy') {
 			container('helm') {
-				pipeline.helmDeploy(
+				pipelineUtil.helmDeploy(
 					dryRun        : false,
 					name          : env.BRANCH_NAME.toLowerCase(),
 					namespace     : env.BRANCH_NAME.toLowerCase(),
