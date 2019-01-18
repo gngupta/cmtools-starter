@@ -41,16 +41,13 @@ def helmDeploy(Map args) {
         namespace = args.namespace
     }
 
-    if (args.dry_run) {
+    if (args.dryRun) {
         println "Running dry-run deployment"
-
-        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} " + (release_overrides ? "--set ${release_overrides}" : "") + " --namespace=${namespace}"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chartDir} " + (release_overrides ? "--set ${release_overrides}" : "") + " --namespace=${namespace}"
     } else {
         println "Running deployment"
-
-        sh "helm dependency update ${args.chart_dir}"
+        sh "helm dependency update ${args.chartDir}"
         sh "helm upgrade --install ${args.name} ${args.chart_dir} " + (release_overrides ? "--set ${release_overrides}" : "") + " --namespace=${namespace}" + " --wait"
-
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
 }
@@ -91,21 +88,23 @@ def getImageTag() {
     return env.BRANCH_NAME + "_" + env.BUILD_NUMBER
 }
 
-def getBuildArgs() {
-    def buildArgs = " --build-arg VCS_REF=${env.GIT_SHA}"
-    buildArgs += " --build-arg VCS_URL=${env.GIT_REMOTE_URL}"
-    buildArgs += " --build-arg VCS_BRANCH=${env.BRANCH_NAME}"
-    buildArgs += " --build-arg BUILD_NUMBER=${env.BUILD_NUMBER}"
-    buildArgs += " --build-arg BUILD_DATE=`date -u +'%Y-%m-%dT%H:%M:%S%Z'`"
-    println "buildArgs :: " + buildArgs
-    return buildArgs
+def getCommonBuildArgs() {
+    def commonBuildArgs = " --build-arg VCS_REF=${env.GIT_SHA}"
+    commonBuildArgs += " --build-arg VCS_URL=${env.GIT_REMOTE_URL}"
+    commonBuildArgs += " --build-arg VCS_BRANCH=${env.BRANCH_NAME}"
+    commonBuildArgs += " --build-arg BUILD_NUMBER=${env.BUILD_NUMBER}"
+    commonBuildArgs += " --build-arg BUILD_DATE=`date -u +'%Y-%m-%dT%H:%M:%S%Z'`"
+    println "Common build args :: " + commonBuildArgs
+    return commonBuildArgs
 }
 
 def buildImage(Map args) {
+    println "docker build . -t ${args.imageName}:${args.imageTag} -f ${args.dockerfile} ${args.buildArgs}"
     sh "docker build . -t ${args.imageName}:${args.imageTag} -f ${args.dockerfile} ${args.buildArgs}"
 }
 
 def pushImage(Map args) {
+    println "docker push ${args.imageName}:${args.imageTag}"
     withDockerRegistry([credentialsId: "docker_hub_creds", url: ""]) {
         sh "docker push ${args.imageName}:${args.imageTag}"
     }

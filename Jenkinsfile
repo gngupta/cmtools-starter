@@ -34,7 +34,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 	
 		def imageName = config.registry.user + "/" + config.registry.repo
 		def imageTag = pipelineUtil.getImageTag()
-		def commonBuildArgs = pipelineUtil.getBuildArgs()
+		def commonBuildArgs = pipelineUtil.getCommonBuildArgs()
 
 		stage('Install') {
 			container('docker') {
@@ -76,6 +76,21 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					credentialsId : config.registry.credentialsId,
 					imageName     : imageName + "-app",
 					imageTag      : imageTag
+				)
+			}
+		}
+
+		stage('Deploy') {
+			container('helm') {
+				pipeline.helmDeploy(
+					dryRun        : false,
+					name          : env.BRANCH_NAME.toLowerCase(),
+					namespace     : env.BRANCH_NAME.toLowerCase(),
+					chartDir      : chartDir,
+					set           : [
+						"imageTag": imageTag,
+						"replicas": config.app.replicas
+					]
 				)
 			}
 		}
