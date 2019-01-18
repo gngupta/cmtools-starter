@@ -27,8 +27,8 @@ export const messages = {
     component: {
       address: {
         placeholder: {
-          firstName: "Firstname",
-          lastName: "Lastname",
+          firstName: "First Name",
+          lastName: "Last Name",
           streetName: "Streetname",
           streetNumber: "Streetnumber",
           additionalStreetInfo: "Additional Streetinfo",
