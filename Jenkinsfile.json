@@ -8,7 +8,7 @@
     "host": "docker.io",
     "credentialsId": "docker_hub_creds",
     "user":"gorakh",
-    "repo": "cmtools"
+    "repo": "cmtools-app"
   },
   "pipeline": {
     "enabled": true,

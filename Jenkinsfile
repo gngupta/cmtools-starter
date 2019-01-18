@@ -28,40 +28,42 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 		// Set additional git envvars for image tag and label
 		pipelineUtil.setGitEnvVars()
-	
+
 		def imageName = config.registry.user + "/" + config.registry.repo
 		def imageTag = pipelineUtil.getImageTag()
 		def commonBuildArgs = pipelineUtil.getCommonBuildArgs()
 
 		stage('Install') {
 			container('docker') {
-				pipelineUtil.buildImage(
-					dockerfile : "./Dockerfile.install",
-					imageName  : imageName + "-install",
-					imageTag   : imageTag,
-					buildArgs  : commonBuildArgs
-				)
+				pipelineUtil.buildImage([
+					dockerfile: "./Dockerfile.install",
+					imageName: imageName + "-install",
+					imageTag: imageTag,
+					buildArgs: commonBuildArgs
+				])
 			}
 		}
 
 		stage('Build') {
+			def installImage = "${imageName}-install:${imageTag}"
 			container('docker') {
-				pipelineUtil.buildImage(
-					dockerfile : "./Dockerfile.build",
-					imageName  : imageName + "-build",
-					imageTag   : imageTag,
-					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_INSTALL_IMAGE=" + imageName + "-install:" + imageTag
-				)
+				pipelineUtil.buildImage([
+					dockerfile: "./Dockerfile.build",
+					imageName: "${imageName}-build",
+					imageTag: imageTag,
+					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_INSTALL_IMAGE=${installImage}"
+				])
 			}
 		}
 
 		stage('Package') {
+			def buildImage =  "${imageName}-build:${imageTag}"
 			container('docker') {
 				pipelineUtil.buildImage([
-					dockerfile : "./Dockerfile.package",
-					imageName  : imageName + "-app",
-					imageTag   : imageTag,
-					buildArgs  : commonBuildArgs + " --build-arg CMTOOLS_BUILD_IMAGE=" + imageName + "-build:" + imageTag
+					dockerfile: "./Dockerfile.package",
+					imageName: imageName,
+					imageTag: imageTag,
+					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_INSTALL_IMAGE=${buildImage}"
 				])
 			}
 		}
@@ -69,10 +71,10 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		stage('Push') {
 			container('docker') {
 				pipelineUtil.pushImage([
-					host          : config.registry.host,
-					credentialsId : config.registry.credentialsId,
-					imageName     : imageName + "-app",
-					imageTag      : imageTag
+					host: config.registry.host,
+					credentialsId: config.registry.credentialsId,
+					imageName: imageName,
+					imageTag: imageTag
 				])
 			}
 		}
@@ -80,15 +82,14 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		// Helm chart directory to deploy app
 		def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
 		println "chartDir :: ${chartDir}"
-
 		stage('Deploy') {
 			container('helm') {
 				pipelineUtil.helmDeploy([
-					dryRun        : false,
-					name          : env.BRANCH_NAME.toLowerCase().replace("_", "-"),
-					namespace     : env.BRANCH_NAME.toLowerCase().replace("_", "-"),
-					chartDir      : chartDir,
-					set           : [
+					dryRun: false,
+					name: env.BRANCH_NAME.toLowerCase().replace("_", "-"),
+					namespace: env.BRANCH_NAME.toLowerCase().replace("_", "-"),
+					chartDir: chartDir,
+					set: [
 						"image.tag": imageTag,
 						"replicas": config.app.replicas
 					]
