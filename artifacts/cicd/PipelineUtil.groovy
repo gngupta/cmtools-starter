@@ -102,7 +102,7 @@ def getBuildArgs() {
 }
 
 def buildImage(Map args) {
-    sh "docker build -t ${args.acct}/${args.repo}:${args.imageTag} -f ${args.dockerfile} ${args.buildArgs} ."
+    sh "docker build . -t ${args.imageName}:${args.imageTag} -f ${args.dockerfile} ${args.buildArgs}"
 }
 
 def pushImage(Map args) {
