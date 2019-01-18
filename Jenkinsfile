@@ -58,7 +58,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					repo      : config.container_repo.repo + "-test",
 					authId    : config.container_repo.jenkins_creds_id,
 					imageTag  : imageTag,
-					buildArgs : pipelineUtil.getBuildArgs()
+					buildArgs : pipelineUtil.getBuildArgs() + " --build-arg CMTOOLS_INSTALL_IMAGE=" + acct + "/" + config.container_repo.repo + "-install:" + imageTag
 				)
 			}
 		}
