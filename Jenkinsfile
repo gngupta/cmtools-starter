@@ -29,14 +29,14 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
 		println "pipeline config ==> ${config}"
 
-		// set additional git envvars for image tag and label
+		// Set additional git envvars for image tag and label
 		pipelineUtil.setGitEnvVars()
 	
 		def imageName = config.registry.user + "/" + config.registry.repo
 		def imageTag = pipelineUtil.getImageTag()
 		def commonBuildArgs = pipelineUtil.getBuildArgs()
 
-		stage('Install Dependencies') {
+		stage('Install') {
 			container('docker') {
 				pipelineUtil.buildImage(
 					dockerfile : "./Dockerfile.install",
@@ -47,7 +47,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			}
 		}
 
-		stage('Build Webpack') {
+		stage('Build') {
 			container('docker') {
 				pipelineUtil.buildImage(
 					dockerfile : "./Dockerfile.build",
@@ -58,7 +58,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			}
 		}
 
-		stage('Package Webpack') {
+		stage('Package') {
 			container('docker') {
 				pipelineUtil.buildImage(
 					dockerfile : "./Dockerfile.package",
@@ -68,5 +68,16 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 				)
 			}
 		}
+
+		stage('Push') {
+			container('docker') {
+				pipelineUtil.pushImage(
+					imageName     : imageName + "-app",
+					imageTag      : imageTag,
+					credentialsId : config.registry.credentialsId
+				)
+			}
+		}
+
 	}
 }
