@@ -94,8 +94,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					chartDir: chartDir,
 					set: [
 						"image.tag": imageTag,
-						replicas: config.app.replicas,
-						appVersion: "${config.app.version}.${env.BUILD_NUMBER}"
+						"replicas": config.app.replicas
 					]
 				])
 			}

@@ -1,8 +1,7 @@
 {
   "app": {
     "name": "cmtools-app",
-    "replicas": "4",
-    "version": "1.0"
+    "replicas": "4"
   },
   "registry": {
     "host": "docker.io",
