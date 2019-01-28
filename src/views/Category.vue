@@ -1,25 +1,25 @@
 <template>
-  <div id="container">
-    <v-container>
-      <div id="body">
-        <ProductListing :slug="categorySlug"/>
-      </div>
-      
+  <div 
+    id="container" 
+    class="bg-wrapper"
+  >
+    <v-container class="no-padding">
+      <ProductListing :slug="categorySlug"/>
+    
+      <optional-footer/>
     </v-container>
   </div>
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
 import ProductListing from "@/components/ProductListing.vue";
+import OptionalFooter from "@/components/OptionalFooter.vue";
 
 export default {
   name: "Category",
   components: {
-    Header,
     ProductListing,
-    Footer
+    OptionalFooter
   },
   props: {
     categorySlug: {
@@ -31,4 +31,14 @@ export default {
 </script>
 
 <style>
+
+.bg-wrapper {
+  background-color: #f6f4f4 !important;
+  height: 100%;
+}
+
+.no-padding {
+  padding: 0;
+}
+
 </style>

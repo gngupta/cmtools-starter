@@ -13,11 +13,13 @@ function obtainDataBySlug(categories) {
   if (Array.isArray(categories)) {
     categories.forEach(({
       id,
+      name,
       slug,
       children,
     }) => {
       dataBySlug[slug] = ({
-        id
+        id,
+        name
       });
       Object.assign(dataBySlug, obtainDataBySlug(children));
     });

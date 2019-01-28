@@ -5,6 +5,13 @@
       row 
       wrap>
       <v-flex xs12>
+        <v-alert
+          :value="orderSubmit.status === StatusEnum.ERROR"
+          type="error"
+          transition="scale-transition"
+        >
+          {{ orderSubmit.error }}
+        </v-alert>
         {{ $t('component.orderConfirmation.title') }}
       </v-flex>
       <v-flex xs6>
@@ -25,6 +32,7 @@
       </v-flex>
       <v-flex xs12>
         <v-btn
+          :disabled="orderSubmit.status === StatusEnum.PENDING"
           color="success"
           @click="convert()"
         >
@@ -37,9 +45,21 @@
 
 <script>
 import priceMixin from "@/mixins/priceMixin";
+import orders from "@/dao/order-dao";
+import Status from '@/misc/status';
+
 export default {
   name: "Orderconfirmation",
   mixins: [priceMixin],
+  data() {
+    return {
+      StatusEnum: Object.assign({}, Status()),
+      orderSubmit: {
+        status: null,
+        error: ''
+      }
+    }
+  },
   computed: {
     cartdetails() {
       return this.$store.getters.cart;
@@ -47,24 +67,29 @@ export default {
   },
   methods: {
     convert() {
-      const request = {
-        uri: "/me/orders",
-        method: "POST",
-        body: {
-          id: this.$store.getters.cart.id,
-          version: this.$store.getters.cart.version
-        }
-      };
-      this.$ajax.execute(request).then(response => response);
-      this.$store.commit("setCart", {});
-      this.$router.push("/");
-    }
-  },
+      this.orderSubmit.status = this.StatusEnum.PENDING;
 
-  
+      //create parameters for the call
+      const params = {
+        id: this.$store.getters.cart.id,
+        version: this.$store.getters.cart.version
+      }
+
+      //execute POST request
+      orders('convertCart', params).then((/*result*/) => {
+        //empty cart & push user to homepage
+        this.orderSubmit.status = this.StatusEnum.OK;
+        this.$store.commit("setCart", {});
+        this.$router.push("/");
+
+      }).catch((/*err*/) => {
+        this.orderSubmit.error = 'Some technical error happened.';
+        this.orderSubmit.status = this.StatusEnum.ERROR;
+
+      });
+    }
+  }
 };
 </script>
 
-<style>
-</style>
 

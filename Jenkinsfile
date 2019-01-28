@@ -100,5 +100,17 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			}
 		}
 
+		stage('Test') {
+			def installImage = "${imageName}-install:${imageTag}"
+			container('docker') {
+				pipelineUtil.buildImage([
+					dockerfile: "./Dockerfile.test",
+					imageName: "${imageName}-test",
+					imageTag: imageTag,
+					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_INSTALL_IMAGE=${installImage}"
+				])
+			}
+		}
+
 	}
 }

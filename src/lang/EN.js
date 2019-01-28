@@ -27,16 +27,16 @@ export const messages = {
     component: {
       address: {
         placeholder: {
-          firstName: "First name",
-          lastName: "Last name",
-          streetName: "Street name",
-          streetNumber: "Street number",
-          additionalStreetInfo: "Additional street info",
-          postalCode: "Postal code",
+          firstName: "Firstname",
+          lastName: "Lastname",
+          streetName: "Streetname",
+          streetNumber: "Streetnumber",
+          additionalStreetInfo: "Additional Streetinfo",
+          postalCode: "Postalcode",
           city: "City",
           country: "Country",
           phone: "Phone",
-          email: "Email address"
+          email: "Emailaddress"
         },
         required: {
           firstName: "Firstname is required.",

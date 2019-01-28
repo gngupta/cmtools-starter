@@ -33,6 +33,5 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   },
-  plugins: ['vue']
-
+  plugins: ['vue', 'graphql']
 }

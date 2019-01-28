@@ -17,7 +17,7 @@
                 type="text" 
                 class="form__input form-control">
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.firstName.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.firstName.required" 
                 class="error">{{ $t('component.address.required.firstName') }}</label>
             </div> 
             
@@ -32,7 +32,7 @@
                 type="text" 
                 class="form__input form-control">
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.lastName.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.lastName.required" 
                 class="error">{{ $t('component.address.required.lastName') }}</label>
             </div>
 
@@ -47,7 +47,7 @@
                 type="text" 
                 class="form__input form-control" >
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.streetName.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.streetName.required" 
                 class="error">{{ $t('component.address.required.streetName') }}</label>
             </div>
 
@@ -62,7 +62,7 @@
                 type="text" 
                 class="form__input form-control" >
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.streetNumber.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.streetNumber.required" 
                 class="error">{{ $t('component.address.required.streetNumber') }}</label>
             </div>
 
@@ -87,10 +87,10 @@
                 type="text" 
                 class="form__input form-control" >
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.postalCode.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.postalCode.required" 
                 class="error">{{ $t('component.address.required.postalCode') }}</label>
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.postalCode.postalCodeValidator" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.postalCode.postalCodeValidator" 
                 class="error">{{ $t('component.address.invalid.postalCode') }}</label>
             </div>
 
@@ -105,7 +105,7 @@
                 type="text" 
                 class="form__input form-control" >
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.city.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.city.required" 
                 class="error">{{ $t('component.address.required.city') }}</label>
             </div>
 
@@ -127,7 +127,7 @@
                   :key="countryOption.value">{{ countryOption.text }}</option>
               </select>
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.country.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.country.required" 
                 class="error">{{ $t('component.address.required.country') }}</label>
             </div>
             
@@ -142,7 +142,7 @@
                 type="text" 
                 class="form__input form-control" >
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.phone.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.phone.required" 
                 class="error">{{ $t('component.address.required.phone') }}</label>
             </div>
 
@@ -157,17 +157,17 @@
                 type="text" 
                 class="form__input form-control" >
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.email.required" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.email.required" 
                 class="error">{{ $t('component.address.required.email') }}</label>
               <label 
-                v-if="submitStatus === 'ERROR' && !$v.email.email" 
+                v-if="addressSubmit.status === StatusEnum.ERROR && !$v.email.email" 
                 class="error">{{ $t('component.address.invalid.email') }}</label>
             </div>
 
             <!-- submit button -->
             <div class="form-group">
               <v-btn 
-                :disabled="submitStatus === 'PENDING'"
+                :disabled="addressSubmit.status === StatusEnum.PENDING"
                 color="success"
                 type="submit"
               >{{ $t('common.form.save') }}</v-btn>
@@ -175,7 +175,7 @@
           </form>
         </div>
         <v-alert
-          :value="alert"
+          :value="addressSubmit.status === StatusEnum.ERROR"
           type="error"
           transition="scale-transition"
         >
@@ -187,8 +187,9 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
 import { required, email } from 'vuelidate/lib/validators'
+import cart from '@/dao/cart-dao';
+import Status from '@/misc/status';
 
 //postal code validator
 const postalCodeValidator = (value) => /\d{4}[ ]?[A-Z]{2}/.test(value) || (value === '') || (value === null)
@@ -196,9 +197,12 @@ const postalCodeValidator = (value) => /\d{4}[ ]?[A-Z]{2}/.test(value) || (value
 export default {
   name: 'Address',
   data() {
-    return{
-      alert: false,
-      submitStatus: null,
+    return {
+      StatusEnum: Object.assign({}, Status()),
+      addressSubmit: {
+        status: null, //a bit useless due translations
+        error: ''
+      },
       countries: [
         { text: "The Netherlands", value: "NL" }
       ],
@@ -245,113 +249,74 @@ export default {
       email
     }
   },
-  methods:{
-    save(){
+  methods: {
+    save() {
       let cartId = this.$store.getters.cart.id;
       let version = this.$store.getters.cart.version;
     
       //checks the form with Vuelidate
       if(this.$v.$invalid) {
-        this.submitStatus = 'ERROR';
-        this.alert = true;
-        this.$refs.addressFormError.show()
+        this.addressSubmit.status = this.StatusEnum.ERROR;
         return;
       }
-      this.alert = false;
-      this.submitStatus = 'PENDING';
-            
-      this.$apollo.mutate({
-        mutation: gql`mutation addAddressToCart($cartId: String!, $version: Long!, $actions: [MyCartUpdateAction!]!, $locale: Locale!) {
-                    updateMyCart(id: $cartId, version: $version, actions: $actions) {
-                        id
-                        version
-                        customerEmail
-                        lineItems {
-                            id
-                            quantity
-                            productId
-                            name(locale: $locale)
-                            productSlug(locale: $locale)
-                            totalPrice {
-                                centAmount
-                                currencyCode
-                            }
-                            variant{
-                                images{
-                                    url
-                                }
-                            }
-                        }
-                        totalPrice {
-                            currencyCode
-                            centAmount
-                        }
-                        shippingAddress{
-                            firstName
-                            lastName
-                            streetName
-                            streetNumber
-                            additionalStreetInfo
-                            postalCode
-                            city
-                            country
-                        }
-                    }
-                }`,
-        // Parameters
-        variables: {
-          locale: this.$store.getters.language,
-          cartId: cartId,
-          customerEmail :this.email,
-          version: version,
-          actions: [{
-            setShippingAddress: {
-              address: {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                streetName: this.streetName,
-                streetNumber: this.streetNumber,
-                additionalStreetInfo: this.additionalStreetInfo,
-                postalCode: this.postalCode,
-                city: this.city,
-                phone: this.phone,
-                email: this.email,
-                country: this.country
-              }
+
+      //updates the status to pending
+      this.addressSubmit.status = this.StatusEnum.PENDING;
+         
+      //preparing parameters for graphql query
+      let params = {
+        locale: this.$store.getters.language,
+        cartId: cartId,
+        customerEmail :this.email,
+        version: version,
+        actions: [{
+          setShippingAddress: {
+            address: {
+              firstName: this.firstName,
+              lastName: this.lastName,
+              streetName: this.streetName,
+              streetNumber: this.streetNumber,
+              additionalStreetInfo: this.additionalStreetInfo,
+              postalCode: this.postalCode,
+              city: this.city,
+              phone: this.phone,
+              email: this.email,
+              country: this.country
             }
-          }]
-        }
-      }).then((data) =>{
+          }
+        }]
+      }
+
+      //execute query -> add address to cart
+      cart('updateAddress', params, this).then((data) => {
+        //update cart, submitstatus and redirects you to the confirmation page
         this.$store.commit('setCart', data.data.updateMyCart);
-        this.submitStatus = "OK";
-        this.$emit('addressSaved')
-      }).catch((error) =>{
-        //should we use b-modal here? (errors didn't exist anymore, so I removed this line.)
-        console.log(error);
-      })
-    },
-    hideAddressFormError() {
-      this.$refs.addressFormError.hide();
+        this.addressSubmit.status = this.StatusEnum.OK;
+        this.$emit('addressSaved');
+
+      }).catch((/*err*/) => {
+        this.addressSubmit.status = this.StatusEnum.ERROR;
+
+      });
     }
   }
-
-
 }
 </script>
 
 <style>
-.form__input, .form__label {
+.form__input,
+.form__label {
   margin: 5px 5px;
 }
 
 .form-group {
-    margin: auto;
-    width: 350px;
-    text-align: left;
+  margin: auto;
+  width: 350px;
+  text-align: left;
 }
 
 .form-wrapper {
-    margin: 30px;
+  margin: 30px;
 }
 
 .form-control {
@@ -369,12 +334,15 @@ export default {
 #additionalStreetInfo {
   width: 28%;
 }
+
 #postalCode {
   width: 20%;
 }
+
 #city {
   width: 30%;
 }
+
 #country {
   width: 15%;
 }
@@ -396,12 +364,13 @@ export default {
   border: 1px solid transparent;
   color: #fff;
 }
+
 .addAddress:hover {
   background: #e9944f;
   color: #fff;
 }
 
 .error {
-    color: #c83b3b;
+  color: #c83b3b;
 }
 </style>

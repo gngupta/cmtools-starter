@@ -53,7 +53,7 @@ npm run test:unit
 npm run test:e2e
 ```
 
-### Test your code inside the container using docker toolkit
+### Test your code inside Docker container using npm toolkit
 ```
 npm run docker
 ```

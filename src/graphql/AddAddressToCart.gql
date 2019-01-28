@@ -1,0 +1,37 @@
+mutation addAddressToCart($cartId: String!, $version: Long!, $actions: [MyCartUpdateAction!]!, $locale: Locale!) {
+  updateMyCart(id: $cartId, version: $version, actions: $actions) {
+    id
+    version
+    customerEmail
+    lineItems {
+        id
+        quantity
+        productId
+        name(locale: $locale)
+        productSlug(locale: $locale)
+        totalPrice {
+            centAmount
+            currencyCode
+        }
+        variant{
+            images{
+                url
+            }
+        }
+    }
+    totalPrice {
+        currencyCode
+        centAmount
+    }
+    shippingAddress{
+        firstName
+        lastName
+        streetName
+        streetNumber
+        additionalStreetInfo
+        postalCode
+        city
+        country
+    }
+  }
+}

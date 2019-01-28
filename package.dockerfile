@@ -4,6 +4,9 @@ FROM $CMTOOLS_BUILD_IMAGE as build-stage
 FROM nginx:stable-alpine as deploy-stage
 COPY ./artifacts/nginx/conf.d/default.conf /etc/nginx/conf.d
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
 # Metadata
 ARG VCS_REF
 ARG VCS_URL
@@ -16,5 +19,3 @@ LABEL wunderman.commerce.vcs.ref=$VCS_REF \
       wunderman.commerce.build.date=$BUILD_DATE \
       wunderman.commerce.build.number=$BUILD_NUMBER \
       wunderman.commerce.maintainer="wunderman.commerce.com"
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]

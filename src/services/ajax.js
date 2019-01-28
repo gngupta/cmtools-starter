@@ -9,11 +9,8 @@ import {
   createClient
 } from '@commercetools/sdk-client'
 
-const projectKey = process.env.VUE_APP_CT_PROJECT_KEY;
-const host = 'https://api.sphere.io/' + projectKey || 'https://api.commercetools.com';
 
-
-export default function createAjaxClient(authMiddleware) {
+export default function createAjaxClient(host, authMiddleware) {
   return createClient({
     middlewares: [
       authMiddleware,

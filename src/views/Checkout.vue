@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import cartdetails from "@/components/Cartdetails.vue";
 import Address from "@/components/Address.vue";
@@ -18,7 +17,6 @@ import Address from "@/components/Address.vue";
 export default {
   name: "Checkout",
   components: {
-    Header,
     cartdetails,
     Address,
     Footer
@@ -30,6 +28,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

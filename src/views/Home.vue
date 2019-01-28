@@ -6,7 +6,7 @@
         <vue-markdown :source = "title" />
         <vue-markdown :source = "text" />
         <VCarousel 
-          hide-controls="true" 
+          :hide-controls="true"
           transition="fade">
           <VCarouselItem :src="image1"/>
           <VCarouselItem :src="image2"/>
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 
 import VueMarkdown from 'vue-markdown'
@@ -28,7 +27,6 @@ import HomePageCMSclient, {HomePageCMS} from '@/content/HomePage.js'
 export default {
   name: "Home",
   components: {
-    Header,
     Footer,
     VueMarkdown
   },

@@ -92,38 +92,41 @@ export default {
 </script>
 
 <style >
-    .shift_left {
-    color: darkslategrey;
-    float: left;
-    padding: 10px;
-    width: 23%;
-    margin-right: 2%;
-    border: 1px solid green;
-    }
+.shift_left {
+  color: darkslategrey;
+  float: left;
+  padding: 10px;
+  width: 23%;
+  margin-right: 2%;
+  border: 1px solid green;
+}
 
-    .shift_right {
-    float: left;
-    color: blue;
-    width: 75%;
-    border: 2px solid black;
-    }
+.shift_right {
+  float: left;
+  color: blue;
+  width: 75%;
+  border: 2px solid black;
+}
 
-    .main_cont {
-      padding-top: 15px;
-    }
+.main_cont {
+  padding-top: 15px;
+}
 
-    .s_pagination {
-    display: flex;
-    width: 167px;
-    margin: 0 auto;
-    padding: 0;
-    list-style: none;
-    justify-content: space-around;
-    }
+.s_pagination {
+  display: flex;
+  width: 167px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  justify-content: space-around;
+}
 
-    .ais-refinement-list{
-      display: inline-block
-    }
+.ais-refinement-list {
+  display: inline-block;
+}
 
-    .ais-refinement-list__item { display: inline-block; font-size: 12px; }
+.ais-refinement-list__item {
+  display: inline-block;
+  font-size: 12px;
+}
 </style>

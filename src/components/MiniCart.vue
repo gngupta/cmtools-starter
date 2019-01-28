@@ -111,6 +111,7 @@ export default {
   top: 44px;
   z-index: 1000;
 }
+
 .minicart-content ul li {
   border-bottom: 1px solid #ddd;
   margin-bottom: 12px;
@@ -139,6 +140,7 @@ export default {
   float: left;
   margin-right: 20px;
 }
+
 .cart-image {
   display: table-cell;
   height: 50px;
@@ -150,9 +152,11 @@ export default {
   margin-right: 10px;
   width: 146px;
 }
+
 .cart-name {
   margin-bottom: 10px;
 }
+
 .cart-price {
   font-weight: 600;
   font-size: 12px;
@@ -164,9 +168,11 @@ export default {
   text-align: center;
   width: 30px;
 }
+
 .cart-qty-name {
   font-size: 8px;
 }
+
 .cart-qty-value {
   font-weight: 600;
 }
@@ -180,6 +186,7 @@ export default {
   transition: 0.3s;
   width: 122px;
 }
+
 .cart-prod-wrapper {
   border: 1px;
 }
@@ -189,30 +196,23 @@ export default {
   color: #444;
   margin-right: 12px;
 }
+
 .view-cart:hover {
   background: #ddd;
   color: #444;
 }
+
 .checkout {
   background: #c83b3b;
   border: 1px solid transparent;
   color: #fff;
 }
+
 .checkout:hover {
   background: #e9944f;
   color: #fff;
 }
 
-.cf:before,
-.cf:after {
-  content: " ";
-  /* 1 */
-  display: table;
-  /* 2 */
-}
-.cf:after {
-  clear: both;
-}
 /** For IE 6/7 only - Include this rule to trigger hasLayout and contain floats. **/
 .cf {
   *zoom: 1;

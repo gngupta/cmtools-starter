@@ -11,17 +11,17 @@ import VueMarkdown from 'vue-markdown'
 
 export default {
   name: "CMSContent",
-  components:{
+  components: {
     VueMarkdown
   },
-  props:{
+  props: {
     contentId: {
       type: String,
       required: true
     }
   },
-  data(){
-    return{
+  data() {
+    return {
       title: '',
       text: ''
     }
@@ -30,7 +30,7 @@ export default {
     this.getContent();
   },
   methods:{
-    async getContent(){
+    async getContent() {
       let cmsData = new ContentPage();
       cmsData = await PageContent.get(this.$content, this.contentId, this.$store.getters.locale);
       this.title = cmsData.title
@@ -39,7 +39,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

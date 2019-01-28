@@ -1,7 +1,7 @@
 <template>
   <VApp>
     <Toolbar @toggleNavBar="toggleNavBar"/>
-    <VContent>
+    <VContent class="light_bg">
       <router-view/>
     </VContent>
     <VNavigationDrawer
@@ -53,9 +53,6 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
 
 <style lang="scss">
 #app {
@@ -65,14 +62,21 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
 #nav {
   padding: 30px;
+
   a {
     font-weight: bold;
     color: #2c3e50;
+
     &.router-link-exact-active {
       color: #42b983;
     }
   }
+}
+
+.light_bg {
+  background: #fff;
 }
 </style>

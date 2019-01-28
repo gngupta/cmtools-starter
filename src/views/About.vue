@@ -11,7 +11,6 @@
 
 
 <script>
-import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import CMSContent from '@/components/CMSContent.vue'
 
@@ -19,7 +18,6 @@ import CMSContent from '@/components/CMSContent.vue'
 export default {
   name: "About",
   components: {
-    Header,
     CMSContent,
     Footer
   },

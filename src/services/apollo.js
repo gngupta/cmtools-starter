@@ -1,27 +1,29 @@
 import Vue from 'vue';
 import VueApollo from 'vue-apollo';
 import {
-  InMemoryCache
+  InMemoryCache, IntrospectionFragmentMatcher
 } from 'apollo-cache-inmemory';
 import {
   createApolloClient
 } from 'vue-cli-plugin-apollo/graphql-client';
-import settings from '@/config/settings';
+import introspectionQueryResultData from '@/graphql/graphql-fragments.json';
 
 // Install the vue plugin
 Vue.use(VueApollo);
 
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || `https://api.commercetools.com/${settings.ct.auth.projectKey}/graphql`;
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData
+});
 
-
+//init cache
 const myCache = new InMemoryCache({
-
+  fragmentMatcher
 });
 
 // Config
 const defaultOptions = {
   // You can use `https` for secure connection (recommended in production)
-  httpEndpoint,
+  httpEndpoint: null,
   // You can use `wss` for secure connection (recommended in production)
   // Use `null` to disable subscriptions
   wsEndpoint: null,
@@ -46,7 +48,8 @@ const defaultOptions = {
 
 };
 
-export default function createProvider(link) {
+export default function createProvider(httpEndpoint, link) {
+  defaultOptions.httpEndpoint = httpEndpoint
   defaultOptions.link = link
   // Create apollo client
   const {

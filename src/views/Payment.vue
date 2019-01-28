@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import CartDetails from "@/components/Cartdetails.vue";
 
@@ -34,7 +33,6 @@ import CartDetails from "@/components/Cartdetails.vue";
 export default {
   name: "About",
   components: {
-    Header,
     CartDetails,
     Footer
   },
@@ -45,7 +43,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

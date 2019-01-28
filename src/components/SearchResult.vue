@@ -53,26 +53,24 @@ export default {
     
 }
 </script>
-    
-<style>
-</style>
 
 <style scoped>
-    .search-result-wrapper {
-        padding: 1rem;
-        width: 50%;
-        margin: auto;
-    }
 
-    .search-result {
-        text-align: left;
-        cursor: pointer;
-        background: #ffffff;
-        box-shadow: 0px 0px 0px 1px #eee;
-        border-radius: 4px;
-    }
+.search-result-wrapper {
+  padding: 1rem;
+  width: 50%;
+  margin: auto;
+}
 
-    a:hover {
-        text-decoration: none;
-    }
+.search-result {
+  text-align: left;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 0 0 0 1px #eee;
+  border-radius: 4px;
+}
+
+a:hover {
+  text-decoration: none;
+}
 </style>

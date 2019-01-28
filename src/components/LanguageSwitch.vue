@@ -31,7 +31,7 @@
 import { loadLanguageAsync } from '@/i18n'
 
 export default {
-  methods:{
+  methods: {
     switchLocale(locale) {
       this.$store.commit("SET_LOCALE", locale)
       loadLanguageAsync(this.$store.getters.language);
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style scoped>
-.selected{
+.selected {
   font-weight: bold;
 }
 </style>
