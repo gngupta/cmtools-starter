@@ -103,12 +103,21 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 		stage('Test') {
 			def installImage = "${imageName}-install:${imageTag}"
+			def clusterIP
+			container('kubectl') {
+				installImage = sh (
+					script: "kubectl get svc cicd-integrate-test-stage-cmtools-app -n=cicd-integrate-test-stage -o jsonpath='{.spec.clusterIP}'",
+					returnStdout: true)
+			}
+
+			println "ClusterIP :: ${clusterIP}"
+
 			container('docker') {
 				pipelineUtil.buildImage([
 					dockerfile: "./test.dockerfile",
 					imageName: "${imageName}-test",
 					imageTag: imageTag,
-					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_INSTALL_IMAGE=${installImage}"
+					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_INSTALL_IMAGE=${installImage} --build-arg CMTOOLS_APP_URL=http://${clusterIP}/"
 				])
 			}
 		}
