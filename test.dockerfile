@@ -1,7 +1,8 @@
 ARG CMTOOLS_INSTALL_IMAGE
 FROM $CMTOOLS_INSTALL_IMAGE
 WORKDIR /app
-RUN npm run test:e2e --url=$CMTOOLS_APP_URL
+RUN node ./node_modules/.bin/vue-cli-service test:e2e --url=$CMTOOLS_APP_URL
+
 # Metadata
 ARG VCS_REF
 ARG VCS_URL
