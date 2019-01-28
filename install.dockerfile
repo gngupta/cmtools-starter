@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+
 # Metadata
 ARG VCS_REF
 ARG VCS_URL
