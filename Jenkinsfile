@@ -12,32 +12,93 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 
 	node('jenkins-pipeline') {
 
-			stage('Checkout') {
-				checkout scm
-			}
+		stage('Checkout') {
+			checkout scm
+		}
 
-			stage('Build') {
-				container('docker') {
-					sh "docker build . -t gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
-				}
-			}
+		// Load pipeline utils and set global variables.
+		def rootDir = pwd()
+		println "rootDir :: ${rootDir}"
+		def pipelineUtil = load "${rootDir}/artifacts/cicd/PipelineUtil.groovy"
 
-			stage('Test'){
-				println "TODO - extend pipline code to run test scripts"
-			}
+		// Read required jenkins workflow configuration values
+		def inputFile = readFile('Jenkinsfile.json')
+		def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
+		println "Pipeline config ==> ${config}"
 
-			stage('Push') {
-				container('docker') {
-					withDockerRegistry([ credentialsId: "docker_hub_creds", url: "" ]) {
-          				sh "docker push gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
-       				}
-				}	
-			}
+		// Set additional git envvars for image tag and label
+		pipelineUtil.setGitEnvVars()
 
-			stage('Deploy') {
-				container('kubectl') {
-					sh "kubectl set image deployment/cmtools-deployment cmtools-app=gorakh/cmtools-app:${env.BRANCH_NAME}_${env.BUILD_NUMBER} -n=cmtools-system"
-				}
+		def imageName = config.registry.user + "/" + config.registry.repo
+		def imageTag = pipelineUtil.getImageTag()
+		def commonBuildArgs = pipelineUtil.getCommonBuildArgs()
+
+		stage('Install') {
+			container('docker') {
+				pipelineUtil.buildImage([
+					dockerfile: "./Dockerfile.install",
+					imageName: imageName + "-install",
+					imageTag: imageTag,
+					buildArgs: commonBuildArgs
+				])
 			}
+		}
+
+		stage('Build') {
+			def installImage = "${imageName}-install:${imageTag}"
+			container('docker') {
+				pipelineUtil.buildImage([
+					dockerfile: "./Dockerfile.build",
+					imageName: "${imageName}-build",
+					imageTag: imageTag,
+					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_INSTALL_IMAGE=${installImage}"
+				])
+			}
+		}
+
+		stage('Package') {
+			def buildImage =  "${imageName}-build:${imageTag}"
+			container('docker') {
+				pipelineUtil.buildImage([
+					dockerfile: "./Dockerfile.package",
+					imageName: imageName,
+					imageTag: imageTag,
+					buildArgs: "${commonBuildArgs} --build-arg CMTOOLS_BUILD_IMAGE=${buildImage}"
+				])
+			}
+		}
+
+		stage('Push') {
+			container('docker') {
+				pipelineUtil.pushImage([
+					host: config.registry.host,
+					credentialsId: config.registry.credentialsId,
+					imageName: imageName,
+					imageTag: imageTag
+				])
+			}
+		}
+
+		// Helm chart directory to deploy app
+		def chartDir = "${rootDir}/artifacts/charts/cmtools-app"
+		println "chartDir :: ${chartDir}"
+
+		stage('Deploy') {
+			container('helm') {
+				pipelineUtil.helmConfig()
+				pipelineUtil.helmLint(chartDir)
+				pipelineUtil.helmDeploy([
+					dryRun: false,
+					name: env.BRANCH_NAME.toLowerCase().replace("_", "-"),
+					namespace: env.BRANCH_NAME.toLowerCase().replace("_", "-"),
+					chartDir: chartDir,
+					set: [
+						"image.tag": imageTag,
+						"replicas": config.app.replicas
+					]
+				])
+			}
+		}
+
 	}
 }

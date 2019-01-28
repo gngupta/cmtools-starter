@@ -1,0 +1,16 @@
+ARG CMTOOLS_INSTALL_IMAGE
+FROM $CMTOOLS_INSTALL_IMAGE
+WORKDIR /app
+RUN npm run test:e2e
+# Metadata
+ARG VCS_REF
+ARG VCS_URL
+ARG VCS_BRANCH
+ARG BUILD_DATE
+ARG BUILD_NUMBER
+LABEL wunderman.commerce.vcs.ref=$VCS_REF \
+      wunderman.commerce.vcs.url=$VCS_URL \
+      wunderman.commerce.vcs.branch=$VCS_BRANCH \
+      wunderman.commerce.build.date=$BUILD_DATE \
+      wunderman.commerce.build.number=$BUILD_NUMBER \
+      wunderman.commerce.maintainer="wunderman.commerce.com"

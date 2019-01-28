@@ -4,183 +4,183 @@
       row 
       wrap>
       <v-flex xs12>
-    <div class="form-wrapper">
-      <form @submit.prevent="save">
-        <!-- Firstname input field -->
-        <div 
-          :class="{ 'form-group--error': $v.firstName.$error }" 
-          class="form-group">
-          <input 
-            id="fName" 
-            v-model.trim="firstName" 
-            :placeholder="$t('component.address.placeholder.firstName')"
-            type="text" 
-            class="form__input form-control">
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.firstName.required" 
-            class="error">{{ $t('component.address.required.firstName') }}</label>
-        </div> 
+        <div class="form-wrapper">
+          <form @submit.prevent="save">
+            <!-- Firstname input field -->
+            <div 
+              :class="{ 'form-group--error': $v.firstName.$error }" 
+              class="form-group">
+              <input 
+                id="fName" 
+                v-model.trim="firstName" 
+                :placeholder="$t('component.address.placeholder.firstName')"
+                type="text" 
+                class="form__input form-control">
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.firstName.required" 
+                class="error">{{ $t('component.address.required.firstName') }}</label>
+            </div> 
             
-        <!-- Lastname input field -->
-        <div 
-          :class="{ 'form-group--error': $v.lastName.$error }" 
-          class="form-group">
-          <input 
-            id="lName" 
-            v-model="lastName" 
-            :placeholder="$t('component.address.placeholder.lastName')"
-            type="text" 
-            class="form__input form-control">
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.lastName.required" 
-            class="error">{{ $t('component.address.required.lastName') }}</label>
-        </div>
+            <!-- Lastname input field -->
+            <div 
+              :class="{ 'form-group--error': $v.lastName.$error }" 
+              class="form-group">
+              <input 
+                id="lName" 
+                v-model="lastName" 
+                :placeholder="$t('component.address.placeholder.lastName')"
+                type="text" 
+                class="form__input form-control">
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.lastName.required" 
+                class="error">{{ $t('component.address.required.lastName') }}</label>
+            </div>
 
-        <!-- Streetname input field -->
-        <div 
-          :class="{ 'form-group--error': $v.streetName.$error }" 
-          class="form-group">
-          <input 
-            id="sName" 
-            v-model="streetName" 
-            :placeholder="$t('component.address.placeholder.streetName')"
-            type="text" 
-            class="form__input form-control" >
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.streetName.required" 
-            class="error">{{ $t('component.address.required.streetName') }}</label>
-        </div>
+            <!-- Streetname input field -->
+            <div 
+              :class="{ 'form-group--error': $v.streetName.$error }" 
+              class="form-group">
+              <input 
+                id="sName" 
+                v-model="streetName" 
+                :placeholder="$t('component.address.placeholder.streetName')"
+                type="text" 
+                class="form__input form-control" >
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.streetName.required" 
+                class="error">{{ $t('component.address.required.streetName') }}</label>
+            </div>
 
-        <!-- Streetnumber input field -->
-        <div 
-          :class="{ 'form-group--error': $v.streetNumber.$error }" 
-          class="form-group">
-          <input 
-            id="sNumber" 
-            v-model="streetNumber" 
-            :placeholder="$t('component.address.placeholder.streetNumber')"
-            type="text" 
-            class="form__input form-control" >
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.streetNumber.required" 
-            class="error">{{ $t('component.address.required.streetNumber') }}</label>
-        </div>
+            <!-- Streetnumber input field -->
+            <div 
+              :class="{ 'form-group--error': $v.streetNumber.$error }" 
+              class="form-group">
+              <input 
+                id="sNumber" 
+                v-model="streetNumber" 
+                :placeholder="$t('component.address.placeholder.streetNumber')"
+                type="text" 
+                class="form__input form-control" >
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.streetNumber.required" 
+                class="error">{{ $t('component.address.required.streetNumber') }}</label>
+            </div>
 
-        <!-- AdditionalStreetInfo input field -->
-        <div class="form-group">
-          <input 
-            id="sInfo" 
-            v-model="additionalStreetInfo" 
-            :placeholder="$t('component.address.placeholder.additionalStreetInfo')"
-            type="text" 
-            class="form__input form-control" >
-        </div>
+            <!-- AdditionalStreetInfo input field -->
+            <div class="form-group">
+              <input 
+                id="sInfo" 
+                v-model="additionalStreetInfo" 
+                :placeholder="$t('component.address.placeholder.additionalStreetInfo')"
+                type="text" 
+                class="form__input form-control" >
+            </div>
 
-        <!-- Postalcode input field -->
-        <div 
-          :class="{ 'form-group--error': $v.postalCode.$error }" 
-          class="form-group">
-          <input 
-            id="pCode" 
-            v-model="postalCode" 
-            :placeholder="$t('component.address.placeholder.postalCode')"
-            type="text" 
-            class="form__input form-control" >
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.postalCode.required" 
-            class="error">{{ $t('component.address.required.postalCode') }}</label>
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.postalCode.postalCodeValidator" 
-            class="error">{{ $t('component.address.invalid.postalCode') }}</label>
-        </div>
+            <!-- Postalcode input field -->
+            <div 
+              :class="{ 'form-group--error': $v.postalCode.$error }" 
+              class="form-group">
+              <input 
+                id="pCode" 
+                v-model="postalCode" 
+                :placeholder="$t('component.address.placeholder.postalCode')"
+                type="text" 
+                class="form__input form-control" >
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.postalCode.required" 
+                class="error">{{ $t('component.address.required.postalCode') }}</label>
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.postalCode.postalCodeValidator" 
+                class="error">{{ $t('component.address.invalid.postalCode') }}</label>
+            </div>
 
-        <!-- City input field -->
-        <div 
-          :class="{ 'form-group--error': $v.city.$error }" 
-          class="form-group">
-          <input 
-            id="City" 
-            v-model="city" 
-            :placeholder="$t('component.address.placeholder.city')"
-            type="text" 
-            class="form__input form-control" >
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.city.required" 
-            class="error">{{ $t('component.address.required.city') }}</label>
-        </div>
+            <!-- City input field -->
+            <div 
+              :class="{ 'form-group--error': $v.city.$error }" 
+              class="form-group">
+              <input 
+                id="City" 
+                v-model="city" 
+                :placeholder="$t('component.address.placeholder.city')"
+                type="text" 
+                class="form__input form-control" >
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.city.required" 
+                class="error">{{ $t('component.address.required.city') }}</label>
+            </div>
 
-        <!-- Country input field -->
-        <div 
-          :class="{ 'form-group--error': $v.country.$error }" 
-          class="form-group">
-          <select 
-            id="Country" 
-            v-model="country" 
-            :placeholder="$t('component.address.placeholder.country')"
-            class="form__input form-control" >
-            <option 
-              :value="null" 
-              disabled>{{ $t('component.address.selectOne') }}</option>
-            <option 
-              v-for="countryOption in countries" 
-              :value="countryOption.value" 
-              :key="countryOption.value">{{ countryOption.text }}</option>
-          </select>
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.country.required" 
-            class="error">{{ $t('component.address.required.country') }}</label>
-        </div>
+            <!-- Country input field -->
+            <div 
+              :class="{ 'form-group--error': $v.country.$error }" 
+              class="form-group">
+              <select 
+                id="Country" 
+                v-model="country" 
+                :placeholder="$t('component.address.placeholder.country')"
+                class="form__input form-control" >
+                <option 
+                  :value="null" 
+                  disabled>{{ $t('component.address.selectOne') }}</option>
+                <option 
+                  v-for="countryOption in countries" 
+                  :value="countryOption.value" 
+                  :key="countryOption.value">{{ countryOption.text }}</option>
+              </select>
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.country.required" 
+                class="error">{{ $t('component.address.required.country') }}</label>
+            </div>
             
-        <!-- Phonenumber input field -->
-        <div 
-          :class="{ 'form-group--error': $v.phone.$error }" 
-          class="form-group">
-          <input 
-            id="Phone" 
-            v-model="phone" 
-            :placeholder="$t('component.address.placeholder.phone')"
-            type="text" 
-            class="form__input form-control" >
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.phone.required" 
-            class="error">{{ $t('component.address.required.phone') }}</label>
-        </div>
+            <!-- Phonenumber input field -->
+            <div 
+              :class="{ 'form-group--error': $v.phone.$error }" 
+              class="form-group">
+              <input 
+                id="Phone" 
+                v-model="phone" 
+                :placeholder="$t('component.address.placeholder.phone')"
+                type="text" 
+                class="form__input form-control" >
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.phone.required" 
+                class="error">{{ $t('component.address.required.phone') }}</label>
+            </div>
 
-        <!-- Email input field -->
-        <div 
-          :class="{ 'form-group--error': $v.email.$error }" 
-          class="form-group">
-          <input 
-            id="Email" 
-            v-model="email" 
-            :placeholder="$t('component.address.placeholder.email')"
-            type="text" 
-            class="form__input form-control" >
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.email.required" 
-            class="error">{{ $t('component.address.required.email') }}</label>
-          <label 
-            v-if="submitStatus === 'ERROR' && !$v.email.email" 
-            class="error">{{ $t('component.address.invalid.email') }}</label>
-        </div>
+            <!-- Email input field -->
+            <div 
+              :class="{ 'form-group--error': $v.email.$error }" 
+              class="form-group">
+              <input 
+                id="Email" 
+                v-model="email" 
+                :placeholder="$t('component.address.placeholder.email')"
+                type="text" 
+                class="form__input form-control" >
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.email.required" 
+                class="error">{{ $t('component.address.required.email') }}</label>
+              <label 
+                v-if="submitStatus === 'ERROR' && !$v.email.email" 
+                class="error">{{ $t('component.address.invalid.email') }}</label>
+            </div>
 
-        <!-- submit button -->
-        <div class="form-group">
-          <v-btn 
-            :disabled="submitStatus === 'PENDING'"
-            color="success"
-            type="submit"
-          >{{ $t('common.form.save') }}</v-btn>
+            <!-- submit button -->
+            <div class="form-group">
+              <v-btn 
+                :disabled="submitStatus === 'PENDING'"
+                color="success"
+                type="submit"
+              >{{ $t('common.form.save') }}</v-btn>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-    <v-alert
-      :value="alert"
-      type="error"
-      transition="scale-transition"
-    >
-      {{ $t('common.form.notCorrect') }}
-    </v-alert>
+        <v-alert
+          :value="alert"
+          type="error"
+          transition="scale-transition"
+        >
+          {{ $t('common.form.notCorrect') }}
+        </v-alert>
       </v-flex>
     </v-layout>
   </v-container>

@@ -2,13 +2,15 @@
 
 .dockerignore
 .git
+.gitignore
 .gitlab-ci2.yml
 artifacts
+!artifacts/nginx
 dist
-Dockerfile
-Jenkinsfile
-Jenkinsfile.json
+Dockerfile*
+Jenkinsfile*
 node_modules
 README.md
 selenium-debug.log
+tests/e2e/reports
 wunderman-commerce-deploy.yml

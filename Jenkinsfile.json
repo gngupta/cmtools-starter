@@ -1,24 +1,16 @@
 {
   "app": {
     "name": "cmtools-app",
-    "replicas": "3",
-    "cpu": "10m",
-    "memory": "128Mi",
-    "test": true,
-    "hostname": "croc-hunter.acs.az.estrado.io"
+    "replicas": "4"
   },
-  "container_repo": {
+  "registry": {
     "host": "docker.io",
-    "master_acct": "gorakh",
-    "alt_acct": "gorakh",
-    "jenkins_creds_id": "docker_hub_creds",
-    "repo": "cmtools-app",
-    "dockeremail": ".",
-    "dockerfile": "./",
-    "image_scanning": false
+    "credentialsId": "docker_hub_creds",
+    "user": "gorakh",
+    "repo": "cmtools-app"
   },
   "pipeline": {
     "enabled": true,
-    "debug": true
+    "debug": false
   }
 }

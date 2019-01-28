@@ -12,56 +12,56 @@
           row 
           justify-space-between>
           <v-flex xs2>
-                <img
-                  v-if="line.variant.images[0] != null"
-                  :src="line.variant.images[0].url"
-                  width="50px"
-                  height="50px"
-                >
+            <img
+              v-if="line.variant.images[0] != null"
+              :src="line.variant.images[0].url"
+              width="50px"
+              height="50px"
+            >
           </v-flex>
           <v-flex xs2>
-                <ApolloMutation
-                  :mutation="require('@/graphql/UpdateProductsInCart.gql')"
-                  :variables="{locale: language, cartId:cartId, version:version, actions: [{changeLineItemQuantity: {lineItemId: line.id, quantity: Number(line.quantity)}}]}"
-                  @done="updateItemInCart"
-                >
-                  <template slot-scope="{ mutate, loading, error }">
-                    <v-text-field
-                      v-model="line.quantity"
-                      :disabled="loading"
-                      :rules="[rules.required, rules.counter]"
-                      type="number"
-                      label="Quantity"
-                      @change="mutate()"   
-                    />
-                    <p v-if="error">An error occured: {{ error }}</p>
-                  </template>
-                </ApolloMutation>
+            <ApolloMutation
+              :mutation="require('@/graphql/UpdateProductsInCart.gql')"
+              :variables="{locale: language, cartId:cartId, version:version, actions: [{changeLineItemQuantity: {lineItemId: line.id, quantity: Number(line.quantity)}}]}"
+              @done="updateItemInCart"
+            >
+              <template slot-scope="{ mutate, loading, error }">
+                <v-text-field
+                  v-model="line.quantity"
+                  :disabled="loading"
+                  :rules="[rules.required, rules.counter]"
+                  type="number"
+                  label="Quantity"
+                  @change="mutate()"   
+                />
+                <p v-if="error">An error occured: {{ error }}</p>
+              </template>
+            </ApolloMutation>
           </v-flex>
           <v-flex xs2>
-                {{ line.name }}
+            {{ line.name }}
           </v-flex>
           <v-flex xs2>
-                <ApolloMutation
-                  :mutation="require('@/graphql/UpdateProductsInCart.gql')"
-                  :variables="{locale: language, cartId:cartId, version:version, actions: [{removeLineItem: {lineItemId: line.id}}]}"
-                  @done="updateItemInCart"
-                >
-                  <template slot-scope="{ mutate, loading, error }">
-                    <v-btn
-                      :disabled="loading" 
-                      @click="mutate()">
-                      {{ $t('component.cartDetails.delete') }}
-                    </v-btn>
-                    <p v-if="error">An error occured: {{ error }}</p>
+            <ApolloMutation
+              :mutation="require('@/graphql/UpdateProductsInCart.gql')"
+              :variables="{locale: language, cartId:cartId, version:version, actions: [{removeLineItem: {lineItemId: line.id}}]}"
+              @done="updateItemInCart"
+            >
+              <template slot-scope="{ mutate, loading, error }">
+                <v-btn
+                  :disabled="loading" 
+                  @click="mutate()">
+                  {{ $t('component.cartDetails.delete') }}
+                </v-btn>
+                <p v-if="error">An error occured: {{ error }}</p>
                 
-                  </template>
-                </ApolloMutation>
+              </template>
+            </ApolloMutation>
           </v-flex>
           <v-flex xs2>
-                {{ line.totalPrice.currencyCode }} {{ formatPrice(line.totalPrice.centAmount) }}
+            {{ line.totalPrice.currencyCode }} {{ formatPrice(line.totalPrice.centAmount) }}
           </v-flex>
-            </v-layout>
+        </v-layout>
       </v-container> 
 
 
