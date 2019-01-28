@@ -95,7 +95,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 					set: [
 						"image.tag": imageTag,
 						"replicas": config.app.replicas,
-						"serviceType": "ClusterIP"
+						"service.type": "ClusterIP"
 					]
 				])
 			}
