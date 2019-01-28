@@ -105,7 +105,7 @@ podTemplate(label: 'jenkins-pipeline', containers: [
 			def installImage = "${imageName}-install:${imageTag}"
 			def clusterIP
 			container('kubectl') {
-				installImage = sh (
+				clusterIP = sh (
 					script: "kubectl get svc cicd-integrate-test-stage-cmtools-app -n=cicd-integrate-test-stage -o jsonpath='{.spec.clusterIP}'",
 					returnStdout: true)
 			}
